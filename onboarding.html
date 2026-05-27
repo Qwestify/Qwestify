@@ -17,8 +17,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 .skip-btn:hover{background:rgba(255,255,255,0.12);color:var(--text)}
 
 /* SLIDES */
-.slides-wrap{flex:1;display:flex;overflow:hidden;position:relative}
-.slide{min-width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;transition:transform 0.5s var(--ease)}
+.slides-wrap{flex:1;display:flex;overflow:hidden;position:relative;background:var(--bg)}
+.slide{min-width:100%;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center;background:var(--bg)}
+.slide.active{display:flex;animation:fadeSlide 0.4s var(--ease)}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
 /* SLIDE ILLUSTRATIONS */
 .slide-illustration{width:200px;height:200px;border-radius:32px;display:flex;align-items:center;justify-content:center;margin-bottom:32px;position:relative}
@@ -147,14 +149,14 @@ html.setAttribute('data-theme',localStorage.getItem('qst-theme')||'dark');
 
 let cur=0;
 const total=3;
-const wrap=document.getElementById('slidesWrap');
+const slides=document.querySelectorAll('.slide');
 
 function goTo(n){
+  slides[cur].classList.remove('active');
+  document.getElementById('d'+cur).className='dot';
   cur=n;
-  wrap.style.transform=`translateX(-${cur*100}%)`;
-  [0,1,2].forEach(i=>{
-    document.getElementById('d'+i).className='dot'+(i===cur?' active':'');
-  });
+  slides[cur].classList.add('active');
+  document.getElementById('d'+cur).className='dot active';
   document.getElementById('prevBtn').style.display=cur>0?'block':'none';
   document.getElementById('nextBtn').textContent=cur===total-1?'Commencer ✓':'Suivant →';
 }
@@ -168,14 +170,14 @@ function finish(){
 
 // Swipe support
 let startX=0;
-wrap.addEventListener('touchstart',e=>startX=e.touches[0].clientX,{passive:true});
-wrap.addEventListener('touchend',e=>{
+document.querySelector('.slides-wrap').addEventListener('touchstart',e=>startX=e.touches[0].clientX,{passive:true});
+document.querySelector('.slides-wrap').addEventListener('touchend',e=>{
   const diff=startX-e.changedTouches[0].clientX;
   if(Math.abs(diff)>50){diff>0?next():prev();}
 });
 
-wrap.style.display='flex';
-wrap.style.transition='transform 0.5s cubic-bezier(0.22,1,0.36,1)';
+// Init first slide
+slides[0].classList.add('active');
 </script>
 </body>
 </html>

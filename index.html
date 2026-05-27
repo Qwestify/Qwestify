@@ -781,9 +781,9 @@ footer {
      NAV
      ============================================================ -->
 <nav>
-  <a class="nav-logo" href="#">
+  <a class="nav-logo" href="#" onclick="showView ? showView('home') : window.scrollTo(0,0)">
     <span class="logo-letter ll1">Q</span>
-    <span class="logo-letter ll2">U</span>
+    <span class="logo-letter ll2">W</span>
     <span class="logo-letter ll3">E</span>
     <span class="logo-letter ll4">S</span>
     <span class="logo-letter ll5">T</span>
@@ -796,9 +796,7 @@ footer {
       <span class="theme-icon moon">🌙</span>
       <span class="theme-icon sun">☀</span>
     </button>
-    <button class="btn-nav btn-nav-quests" onclick="scrollTo('#quests')">Quêtes</button>
-    <button class="btn-nav" onclick="showAuth('login')">Connexion</button>
-    <button class="btn-nav btn-nav-primary" onclick="goSignup()">S'inscrire</button>
+    <button class="btn-nav btn-nav-primary" onclick="goSignup()">Connexion / S'inscrire</button>
   </div>
 </nav>
 
@@ -1141,7 +1139,7 @@ footer {
 <footer>
   <div class="footer-logo">
     <span class="logo-letter ll1" style="width:22px;height:22px;font-size:14px">Q</span>
-    <span class="logo-letter ll2" style="width:22px;height:22px;font-size:14px">U</span>
+    <span class="logo-letter ll2" style="width:22px;height:22px;font-size:14px">W</span>
     <span class="logo-letter ll3" style="width:22px;height:22px;font-size:14px">E</span>
     <span class="logo-letter ll4" style="width:22px;height:22px;font-size:14px">S</span>
     <span class="logo-letter ll5" style="width:22px;height:22px;font-size:14px">T</span>
@@ -1150,11 +1148,11 @@ footer {
     <span class="logo-letter ll8" style="width:22px;height:22px;font-size:14px">Y</span>
   </div>
   <div class="footer-links">
-    <a href="#">À propos</a>
-    <a href="#">Partenaires</a>
-    <a href="#">Confidentialité</a>
-    <a href="#">CGU</a>
-    <a href="#">Contact</a>
+    <a href="legal.html">À propos</a>
+    <a href="commercant.html">Partenaires</a>
+    <a href="legal.html#doc-privacy">Confidentialité</a>
+    <a href="legal.html">CGU</a>
+    <a href="mailto:contact@qwestify.ch">Contact</a>
   </div>
   <div class="footer-copy">© 2025 Qwestify — Genève, Suisse</div>
 </footer>
@@ -1627,7 +1625,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   <nav class="app-nav">
     <button class="icon-btn" onclick="openMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
-    <div class="app-nav-logo"><span class="anl ll1">Q</span><span class="anl ll2">U</span><span class="anl ll3">E</span><span class="anl ll4">S</span><span class="anl ll5">T</span><span class="anl ll6">I</span><span class="anl ll7">F</span><span class="anl ll8">Y</span></div>
+    <div class="app-nav-logo" onclick="window.scrollTo(0,0)" style="cursor:pointer"><span class="anl ll1">Q</span><span class="anl ll2">W</span><span class="anl ll3">E</span><span class="anl ll4">S</span><span class="anl ll5">T</span><span class="anl ll6">I</span><span class="anl ll7">F</span><span class="anl ll8">Y</span></div>
     <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
     <div class="league-badge"><div class="league-dot"></div>Ligue Or</div>
     <div class="avatar-badge" onclick="openPanel()">J<span class="lvl-badge">22</span></div>
