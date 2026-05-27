@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Scanner</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--green:#22C55E;--red:#EF4444;--yellow:#F59E0B;--violet:#7C3AED}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#fff;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-back{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.nav-back svg{width:18px;height:18px}
+.nav-title{font-size:15px;font-weight:800;letter-spacing:-0.3px}
+.theme-toggle{width:44px;height:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;cursor:pointer;position:relative}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px);background:var(--orange)}
+
+/* SCANNER VIEW */
+#scannerView{display:block}
+#resultView{display:none}
+#errorView{display:none}
+
+.scanner-header{padding:24px 16px 16px;text-align:center}
+.scanner-header h1{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
+.scanner-header p{font-size:14px;color:var(--text2);line-height:1.5}
+
+/* CAMERA AREA */
+.camera-wrap{margin:0 16px;border-radius:20px;overflow:hidden;position:relative;background:#000;aspect-ratio:1;max-width:400px;margin-left:auto;margin-right:auto}
+#video{width:100%;height:100%;object-fit:cover;display:block}
+.scan-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.scan-frame{width:65%;aspect-ratio:1;position:relative}
+.scan-corner{position:absolute;width:24px;height:24px;border-color:var(--orange);border-style:solid}
+.sc-tl{top:0;left:0;border-width:3px 0 0 3px;border-radius:4px 0 0 0}
+.sc-tr{top:0;right:0;border-width:3px 3px 0 0;border-radius:0 4px 0 0}
+.sc-bl{bottom:0;left:0;border-width:0 0 3px 3px;border-radius:0 0 0 4px}
+.sc-br{bottom:0;right:0;border-width:0 3px 3px 0;border-radius:0 0 4px 0}
+.scan-line{position:absolute;left:5%;right:5%;height:2px;background:linear-gradient(90deg,transparent,var(--orange),transparent);animation:scanMove 2s ease-in-out infinite}
+@keyframes scanMove{0%,100%{top:10%}50%{top:90%}}
+.scan-hint{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:12px;color:rgba(255,255,255,0.6);font-weight:500}
+
+/* OR DIVIDER */
+.or-divider{display:flex;align-items:center;gap:12px;margin:20px 16px}
+.or-line{flex:1;height:1px;background:var(--border)}
+.or-text{font-size:12px;color:var(--text3);font-weight:600}
+
+/* MANUAL INPUT */
+.manual-section{padding:0 16px 24px}
+.manual-label{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:8px}
+.code-input-wrap{display:flex;gap:8px}
+.code-input{flex:1;padding:13px 16px;background:var(--bg2);border:1px solid var(--border2);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;font-weight:700;letter-spacing:2px;outline:none;text-transform:uppercase}
+.code-input:focus{border-color:var(--orange)}
+.code-input::placeholder{letter-spacing:0;font-weight:400;font-size:14px;text-transform:none}
+.btn-scan{padding:13px 20px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.btn-scan:hover{background:var(--orange2)}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px;padding-top:16px;border-top:1px solid var(--border)}
+.stat-mini{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center}
+.sm-num{font-size:20px;font-weight:900;margin-bottom:2px}
+.sm-label{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+
+/* RESULT VIEW */
+.result-wrap{padding:32px 16px;text-align:center;animation:fadeUp 0.4s var(--ease)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.result-icon{font-size:64px;margin-bottom:16px;display:block}
+.result-title{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px}
+.result-sub{font-size:14px;color:var(--text2);line-height:1.5;margin-bottom:24px}
+.coupon-info{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:20px;text-align:left}
+.ci-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.ci-row:last-child{border-bottom:none}
+.ci-label{font-size:13px;color:var(--text2)}
+.ci-val{font-size:13px;font-weight:700}
+.ci-val.green{color:var(--green)}
+.ci-val.orange{color:var(--orange)}
+.btn-validate{width:100%;padding:15px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-bottom:10px}
+.btn-validate:hover{filter:brightness(1.1)}
+.btn-cancel{width:100%;padding:13px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer}
+
+/* VALIDATED VIEW */
+.validated-wrap{padding:40px 16px;text-align:center;animation:fadeUp 0.4s var(--ease)}
+.check-circle{width:80px;height:80px;border-radius:50%;background:rgba(34,197,94,0.15);border:2px solid rgba(34,197,94,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:scaleIn 0.5s var(--ease)}
+@keyframes scaleIn{from{transform:scale(0)}to{transform:scale(1)}}
+.check-circle svg{width:40px;height:40px}
+
+/* ERROR VIEW */
+.error-wrap{padding:40px 16px;text-align:center}
+</style>
+</head>
+<body>
+<nav>
+  <button class="nav-back" onclick="history.back()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour
+  </button>
+  <div class="nav-title">Scanner un bon</div>
+  <button class="theme-toggle" id="themeToggle"></button>
+</nav>
+
+<!-- SCANNER VIEW -->
+<div id="scannerView">
+  <div class="scanner-header">
+    <h1>Valider un bon client</h1>
+    <p>Scanne le QR code affiché sur l'écran du client, ou saisis le code manuellement.</p>
+  </div>
+
+  <div class="camera-wrap">
+    <video id="video" autoplay playsinline muted></video>
+    <div class="scan-overlay">
+      <div class="scan-frame">
+        <div class="scan-corner sc-tl"></div>
+        <div class="scan-corner sc-tr"></div>
+        <div class="scan-corner sc-bl"></div>
+        <div class="scan-corner sc-br"></div>
+        <div class="scan-line"></div>
+      </div>
+    </div>
+    <div class="scan-hint">Centrez le QR code dans le cadre</div>
+  </div>
+
+  <div class="or-divider">
+    <div class="or-line"></div>
+    <div class="or-text">OU SAISIR LE CODE</div>
+    <div class="or-line"></div>
+  </div>
+
+  <div class="manual-section">
+    <div class="manual-label">Code du bon</div>
+    <div class="code-input-wrap">
+      <input class="code-input" type="text" id="codeInput" placeholder="QST-XXXX-XXXX" maxlength="14" oninput="formatCode(this)">
+      <button class="btn-scan" onclick="validateCode()">Valider</button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-mini"><div class="sm-num" style="color:var(--green)">24</div><div class="sm-label">Validés aujourd'hui</div></div>
+    <div class="stat-mini"><div class="sm-num" style="color:var(--orange)">312</div><div class="sm-label">Total ce mois</div></div>
+    <div class="stat-mini"><div class="sm-num" style="color:var(--yellow)">8</div><div class="sm-label">En attente</div></div>
+  </div>
+</div>
+
+<!-- RESULT VIEW (coupon found) -->
+<div id="resultView">
+  <div class="result-wrap">
+    <span class="result-icon">🎫</span>
+    <div class="result-title">Bon trouvé !</div>
+    <div class="result-sub">Vérifie les informations ci-dessous avant de valider.</div>
+    <div class="coupon-info">
+      <div class="ci-row"><span class="ci-label">Client</span><span class="ci-val">Jordan M.</span></div>
+      <div class="ci-row"><span class="ci-label">Campagne</span><span class="ci-val">Uber Genève</span></div>
+      <div class="ci-row"><span class="ci-label">Récompense</span><span class="ci-val green">20 CHF de réduction</span></div>
+      <div class="ci-row"><span class="ci-label">Code</span><span class="ci-val orange" id="displayCode">QST-7X4K-2M9P</span></div>
+      <div class="ci-row"><span class="ci-label">Expire le</span><span class="ci-val">25 juin 2025</span></div>
+      <div class="ci-row"><span class="ci-label">Statut</span><span class="ci-val green">✓ Valide</span></div>
+    </div>
+    <button class="btn-validate" onclick="confirmValidation()">Confirmer la validation</button>
+    <button class="btn-cancel" onclick="resetScanner()">Annuler</button>
+  </div>
+</div>
+
+<!-- VALIDATED VIEW -->
+<div id="validatedView" style="display:none">
+  <div class="validated-wrap">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="result-title" style="color:var(--green)">Bon validé !</div>
+    <div class="result-sub" style="margin-bottom:32px">Le bon a été marqué comme utilisé.<br>Le client ne peut plus l'utiliser.</div>
+    <button class="btn-validate" onclick="resetScanner()" style="max-width:300px;margin:0 auto;display:block">Scanner un autre bon</button>
+  </div>
+</div>
+
+<!-- ERROR VIEW -->
+<div id="errorView">
+  <div class="error-wrap">
+    <div style="font-size:60px;margin-bottom:16px">❌</div>
+    <div class="result-title" style="color:var(--red)">Code invalide</div>
+    <div class="result-sub" style="margin-bottom:32px">Ce bon n'existe pas, a déjà été utilisé, ou a expiré.</div>
+    <button class="btn-validate" onclick="resetScanner()" style="background:var(--orange);max-width:300px;margin:0 auto;display:block">Réessayer</button>
+  </div>
+</div>
+
+<script>
+// THEME
+const html=document.documentElement;
+html.setAttribute('data-theme',localStorage.getItem('qst-theme')||'dark');
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+
+// CAMERA
+async function startCamera(){
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'},audio:false});
+    document.getElementById('video').srcObject=stream;
+  }catch(e){
+    // Camera not available in demo — silent fail
+    document.getElementById('video').style.background='#1a1a2e';
+  }
+}
+startCamera();
+
+// FORMAT CODE
+function formatCode(el){
+  let v=el.value.replace(/[^A-Z0-9a-z]/g,'').toUpperCase();
+  if(v.length>3) v=v.slice(0,3)+'-'+v.slice(3);
+  if(v.length>8) v=v.slice(0,8)+'-'+v.slice(8);
+  el.value=v.slice(0,14);
+}
+
+// VALIDATE CODE
+const validCodes=['QST-7X4K-2M9P','QST-AB3C-4DEF','QST-9K2M-PX7Q'];
+function validateCode(){
+  const code=document.getElementById('codeInput').value.trim().toUpperCase();
+  if(code.length<14){alert('Code incomplet — format: QST-XXXX-XXXX');return;}
+  document.getElementById('displayCode').textContent=code;
+  if(validCodes.includes(code)){
+    show('resultView');
+  }else{
+    show('errorView');
+  }
+}
+
+function confirmValidation(){
+  show('validatedView');
+}
+
+function resetScanner(){
+  document.getElementById('codeInput').value='';
+  show('scannerView');
+}
+
+function show(id){
+  ['scannerView','resultView','validatedView','errorView'].forEach(v=>{
+    document.getElementById(v).style.display=v===id?'block':'none';
+  });
+}
+</script>
+</body>
+</html>

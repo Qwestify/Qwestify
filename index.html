@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Complete. Earn. Repeat.</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* brand */
+  --orange:  #FF6B2B;
+  --orange2: #FF8C55;
+  --violet:  #7C3AED;
+  --violet2: #9D5FF5;
+  --green:   #22C55E;
+  --red:     #EF4444;
+  --yellow:  #F59E0B;
+}
+
+[data-theme="dark"] {
+  --bg:       #0E0E14;
+  --bg2:      #13131C;
+  --bg3:      #1C1C28;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.12);
+  --text:     #F0F0FA;
+  --text2:    #9898B8;
+  --text3:    #5A5A7A;
+  --glass:    rgba(255,255,255,0.03);
+  --glow:     rgba(255,107,43,0.18);
+  --shadow:   0 24px 64px rgba(0,0,0,0.5);
+}
+
+[data-theme="light"] {
+  --bg:       #F5F5FA;
+  --bg2:      #FFFFFF;
+  --bg3:      #EBEBF5;
+  --border:   rgba(0,0,0,0.07);
+  --border2:  rgba(0,0,0,0.12);
+  --text:     #0E0E14;
+  --text2:    #5A5A7A;
+  --text3:    #9898B8;
+  --glass:    rgba(0,0,0,0.02);
+  --glow:     rgba(255,107,43,0.10);
+  --shadow:   0 24px 64px rgba(0,0,0,0.08);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  transition: background 0.35s var(--ease), color 0.35s var(--ease);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.35s var(--ease), border-color 0.35s var(--ease);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 2px;
+  cursor: pointer; text-decoration: none;
+}
+
+.logo-letter {
+  font-family: 'Inter', sans-serif;
+  font-weight: 800;
+  font-size: 18px;
+  width: 26px; height: 26px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 6px;
+  transition: transform 0.2s var(--ease);
+  color: #fff;
+}
+.logo-letter:hover { transform: translateY(-2px); }
+.ll1 { background: var(--orange); }
+.ll2 { background: var(--green); }
+.ll3 { background: var(--violet); }
+.ll4 { background: var(--yellow); }
+.ll5 { background: #E11D48; }
+.ll6 { background: #0891B2; }
+.ll7 { background: var(--green); }
+.ll8 { background: var(--orange); }
+
+.nav-right { display: flex; align-items: center; gap: 10px; }
+
+/* THEME TOGGLE */
+.theme-toggle {
+  width: 52px; height: 28px;
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+.theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--text2);
+  transition: transform 0.3s var(--ease), background 0.3s;
+}
+[data-theme="light"] .theme-toggle::after {
+  transform: translateX(24px);
+  background: var(--orange);
+}
+
+.theme-icon {
+  position: absolute;
+  font-size: 10px;
+  top: 50%; transform: translateY(-50%);
+  pointer-events: none;
+}
+.theme-icon.moon { left: 6px; }
+.theme-icon.sun  { right: 6px; }
+
+.btn-nav {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 600;
+  padding: 7px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-nav:hover { background: var(--bg3); }
+
+.btn-nav-primary {
+  background: var(--orange);
+  border-color: var(--orange);
+  color: #fff;
+}
+.btn-nav-primary:hover {
+  background: var(--orange2);
+  border-color: var(--orange2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255,107,43,0.35);
+}
+
+.btn-nav-quests {
+  color: var(--orange);
+  border-color: rgba(255,107,43,0.3);
+  font-weight: 700;
+}
+.btn-nav-quests:hover {
+  background: rgba(255,107,43,0.08);
+  border-color: var(--orange);
+}
+@media (max-width: 380px) { .btn-nav-quests { display: none; } }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  min-height: 100svh;
+  padding: 100px 20px 60px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+
+/* ambient glow */
+.hero-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,43,0.12) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -60%);
+  pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 0.6; transform: translate(-50%, -60%) scale(1); }
+  50%      { opacity: 1;   transform: translate(-50%, -60%) scale(1.08); }
+}
+
+.hero-glow2 {
+  position: absolute;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,58,237,0.10) 0%, transparent 70%);
+  bottom: 0; right: -100px;
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px; font-weight: 600; color: var(--text2);
+  letter-spacing: 0.5px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.7s var(--ease) both;
+}
+
+.badge-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green);
+  animation: blink 2s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(36px, 9vw, 72px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+  animation: fadeUp 0.7s var(--ease) 0.1s both;
+}
+
+.hero h1 .accent {
+  background: linear-gradient(135deg, var(--orange), var(--yellow));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero p {
+  font-size: clamp(15px, 3vw, 18px);
+  color: var(--text2);
+  max-width: 420px;
+  line-height: 1.65;
+  margin-bottom: 36px;
+  font-weight: 400;
+  animation: fadeUp 0.7s var(--ease) 0.2s both;
+}
+
+.hero-cta {
+  display: flex; flex-direction: column; gap: 12px; width: 100%;
+  max-width: 320px;
+  animation: fadeUp 0.7s var(--ease) 0.3s both;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 15px 28px;
+  background: var(--orange);
+  color: #fff; border: none; border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s var(--ease);
+  letter-spacing: 0.2px;
+}
+.btn-primary:hover {
+  background: var(--orange2);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(255,107,43,0.4);
+}
+.btn-primary:active { transform: translateY(0); }
+
+.btn-secondary {
+  width: 100%;
+  padding: 14px 28px;
+  background: transparent;
+  color: var(--text2);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-secondary:hover { background: var(--bg3); color: var(--text); }
+
+.hero-stats {
+  display: flex; gap: 24px; justify-content: center;
+  margin-top: 48px; flex-wrap: wrap;
+  animation: fadeUp 0.7s var(--ease) 0.4s both;
+}
+
+.hstat { text-align: center; }
+.hstat-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 26px; font-weight: 800;
+  color: var(--text);
+}
+.hstat-label {
+  font-size: 11px; font-weight: 600;
+  color: var(--text3); letter-spacing: 1px;
+  text-transform: uppercase; margin-top: 2px;
+}
+
+/* ============================================================
+   SECTION SHARED
+   ============================================================ */
+section { padding: 72px 20px; }
+
+.section-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(26px, 6vw, 42px);
+  font-weight: 800; line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 15px; color: var(--text2);
+  line-height: 1.65; max-width: 480px;
+}
+
+/* ============================================================
+   QUESTS MAIN SECTION
+   ============================================================ */
+.quests-main { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.qm-bar {
+  margin-top: 28px; margin-bottom: 20px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.qm-search {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg3); border: 1px solid var(--border2);
+  border-radius: 10px; padding: 10px 14px;
+}
+.qm-search input {
+  flex: 1; background: none; border: none; outline: none;
+  color: var(--text); font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+.qm-search input::placeholder { color: var(--text3); }
+
+.qm-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.qf-btn {
+  padding: 6px 14px; border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: transparent; color: var(--text2);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s;
+}
+.qf-btn:hover { background: var(--bg3); color: var(--text); }
+.qf-btn.active { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+/* featured card */
+.qm-featured {
+  margin-bottom: 14px;
+  border-radius: 18px; overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  cursor: pointer; transition: all 0.25s var(--ease);
+}
+.qm-featured:hover { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange), 0 16px 48px rgba(255,107,43,0.1); }
+
+.qm-card-banner {
+  height: 110px; position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.qm-uber     { background: linear-gradient(135deg, #000, #1c1c1c); }
+.qm-migros   { background: linear-gradient(135deg, #EA580C, #C2410C); }
+.qm-shiroshi { background: linear-gradient(135deg, #4C1D95, #6D28D9); }
+.qm-volta    { background: linear-gradient(135deg, #065F46, #047857); }
+.qm-kebab    { background: linear-gradient(135deg, #92400E, #B45309); }
+
+.qm-card-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 38px; font-weight: 800; color: #fff;
+  letter-spacing: -1.5px;
+}
+.qm-card-emoji { font-size: 32px; }
+
+.qm-sponsored-badge {
+  position: absolute; top: 10px; left: 10px;
+  background: var(--yellow); color: #000;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+}
+
+.qm-reward-badge {
+  position: absolute; top: 10px; right: 10px;
+  background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.3);
+  color: var(--green);
+  font-size: 12px; font-weight: 700;
+  padding: 4px 10px; border-radius: 7px;
+}
+
+.qm-card-body { padding: 16px; }
+.qm-card-name { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 700; margin-bottom: 5px; }
+.qm-card-desc { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 14px; }
+
+.qm-card-meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.qm-tag {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 3px 9px;
+  font-size: 11px; font-weight: 600; color: var(--text2);
+}
+.qm-tag-pop { color: var(--orange); border-color: rgba(255,107,43,0.2); background: rgba(255,107,43,0.06); }
+
+.qm-start-btn {
+  margin-left: auto;
+  background: var(--orange); color: #fff;
+  border: none; border-radius: 7px;
+  padding: 7px 14px; font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  transition: all 0.2s; white-space: nowrap;
+}
+.qm-start-btn:hover { background: var(--orange2); transform: scale(1.03); }
+
+/* local grid */
+.qm-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+
+.qm-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  cursor: pointer; transition: all 0.2s;
+}
+.qm-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+@media (min-width: 640px) {
+  .qm-bar { flex-direction: row; align-items: center; }
+  .qm-search { flex: 1; }
+  .qm-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ============================================================
+   HOW IT WORKS
+   ============================================================ */
+.how { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.steps {
+  margin-top: 40px;
+  display: flex; flex-direction: column; gap: 16px;
+}
+
+.step {
+  display: flex; gap: 20px; align-items: flex-start;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.step:hover { border-color: var(--border2); transform: translateX(4px); }
+
+.step-num {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px; font-weight: 800; color: #fff;
+}
+.sn1 { background: var(--orange); }
+.sn2 { background: var(--violet); }
+.sn3 { background: var(--green); }
+.sn4 { background: var(--yellow); }
+
+.step-content h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 5px;
+}
+.step-content p { font-size: 13px; color: var(--text2); line-height: 1.6; }
+
+/* ============================================================
+   QUEST TYPES
+   ============================================================ */
+.quest-types { background: var(--bg); }
+
+.qt-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.qt-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 16px;
+  transition: all 0.25s var(--ease);
+  cursor: default;
+}
+.qt-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.qt-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+}
+.qt-icon svg { width: 20px; height: 20px; }
+
+.qt-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px; font-weight: 700;
+  margin-bottom: 6px;
+}
+.qt-desc { font-size: 12px; color: var(--text2); line-height: 1.5; }
+
+/* ============================================================
+   PARTNERS PREVIEW
+   ============================================================ */
+.partners { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+.featured-card {
+  margin-top: 24px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s var(--ease);
+}
+.featured-card:hover { border-color: var(--orange); box-shadow: 0 0 0 1px var(--orange), 0 20px 60px rgba(255,107,43,0.12); }
+
+.fc-banner {
+  height: 120px;
+  background: linear-gradient(135deg, #111, #1c1c1c);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+[data-theme="light"] .fc-banner {
+  background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+}
+
+.fc-banner-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 42px; font-weight: 800;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: -1.5px;
+  z-index: 1;
+}
+
+.fc-badge {
+  position: absolute; top: 12px; left: 12px;
+  background: var(--yellow); color: #000;
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.fc-reward {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(34,197,94,0.15);
+  border: 1px solid rgba(34,197,94,0.3);
+  color: var(--green);
+  font-size: 13px; font-weight: 700;
+  padding: 5px 10px; border-radius: 8px;
+}
+
+.fc-body { padding: 18px; }
+.fc-name { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.fc-desc { font-size: 13px; color: var(--text2); line-height: 1.5; margin-bottom: 16px; }
+
+.fc-meta {
+  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+}
+
+.meta-tag {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 12px; font-weight: 500; color: var(--text2);
+}
+
+.btn-fc {
+  margin-left: auto;
+  background: var(--orange);
+  color: #fff; border: none; border-radius: 8px;
+  padding: 8px 18px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-fc:hover { background: var(--orange2); transform: scale(1.03); }
+
+.local-grid {
+  margin-top: 16px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+
+.lc {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px; overflow: hidden;
+  cursor: pointer; transition: all 0.2s;
+}
+.lc:hover { border-color: var(--border2); transform: translateY(-2px); }
+
+.lc-top {
+  height: 60px;
+  display: flex; align-items: center; justify-content: center;
+}
+.lc-migros  { background: linear-gradient(135deg, #EA580C, #C2410C); }
+.lc-shiroshi{ background: linear-gradient(135deg, #4C1D95, #6D28D9); }
+.lc-volta   { background: linear-gradient(135deg, #065F46, #047857); }
+.lc-kebab   { background: linear-gradient(135deg, #92400E, #B45309); }
+
+.lc-icon { font-size: 22px; }
+
+.lc-body { padding: 10px 12px; }
+.lc-name { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+.lc-reward {
+  display: inline-block;
+  background: rgba(34,197,94,0.1);
+  border: 1px solid rgba(34,197,94,0.2);
+  color: var(--green);
+  font-size: 11px; font-weight: 600;
+  padding: 2px 7px; border-radius: 4px;
+}
+
+/* ============================================================
+   STREAK / GM SECTION
+   ============================================================ */
+.streak-section { background: var(--bg); }
+
+.streak-card {
+  margin-top: 32px;
+  background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(255,107,43,0.06));
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 20px; padding: 28px 24px;
+  text-align: center;
+}
+
+.streak-fire {
+  font-size: 52px; line-height: 1; margin-bottom: 12px;
+  filter: drop-shadow(0 0 16px rgba(245,158,11,0.5));
+}
+
+.streak-card h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 22px; font-weight: 800; margin-bottom: 8px;
+}
+.streak-card p { font-size: 14px; color: var(--text2); line-height: 1.6; margin-bottom: 24px; }
+
+.streak-days {
+  display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.day-dot {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.day-dot.done { background: var(--yellow); color: #000; }
+.day-dot.today { background: var(--orange); color: #fff; box-shadow: 0 0 12px rgba(255,107,43,0.5); }
+.day-dot.next { background: var(--bg3); border: 1px solid var(--border); color: var(--text3); }
+
+/* ============================================================
+   CTA SECTION
+   ============================================================ */
+.cta-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+
+.cta-inner {
+  max-width: 480px; margin: 0 auto;
+}
+
+.cta-section .section-title { margin-bottom: 12px; }
+.cta-section .section-sub { margin: 0 auto 32px; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.footer-logo {
+  display: flex; justify-content: center; gap: 2px; margin-bottom: 16px;
+}
+
+.footer-links {
+  display: flex; justify-content: center; gap: 20px;
+  flex-wrap: wrap; margin-bottom: 16px;
+}
+.footer-links a {
+  font-size: 13px; color: var(--text3);
+  text-decoration: none; font-weight: 500;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--text2); }
+
+.footer-copy { font-size: 12px; color: var(--text3); }
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ============================================================
+   DESKTOP ADJUSTMENTS
+   ============================================================ */
+@media (min-width: 640px) {
+  .hero-cta { flex-direction: row; max-width: 400px; }
+  .btn-primary, .btn-secondary { width: auto; flex: 1; }
+
+  .steps { display: grid; grid-template-columns: 1fr 1fr; }
+
+  .qt-grid { grid-template-columns: repeat(4, 1fr); }
+
+  .local-grid { grid-template-columns: repeat(4, 1fr); }
+
+  nav { padding: 0 32px; }
+  section { padding: 96px 32px; }
+}
+
+@media (min-width: 1024px) {
+  section { padding: 112px 48px; max-width: 1100px; margin: 0 auto; }
+  .hero { padding: 120px 48px 80px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<nav>
+  <a class="nav-logo" href="#">
+    <span class="logo-letter ll1">Q</span>
+    <span class="logo-letter ll2">U</span>
+    <span class="logo-letter ll3">E</span>
+    <span class="logo-letter ll4">S</span>
+    <span class="logo-letter ll5">T</span>
+    <span class="logo-letter ll6">I</span>
+    <span class="logo-letter ll7">F</span>
+    <span class="logo-letter ll8">Y</span>
+  </a>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="theme-icon moon">🌙</span>
+      <span class="theme-icon sun">☀</span>
+    </button>
+    <button class="btn-nav btn-nav-quests" onclick="scrollTo('#quests')">Quêtes</button>
+    <button class="btn-nav" onclick="showAuth('login')">Connexion</button>
+    <button class="btn-nav btn-nav-primary" onclick="goSignup()">S'inscrire</button>
+  </div>
+</nav>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Disponible à Genève — Lancement 2025
+  </div>
+
+  <h1>
+    Complète des quêtes.<br>
+    <span class="accent">Gagne des récompenses.</span>
+  </h1>
+
+  <p>
+    Qwestify connecte tes commerces préférés à un système de défis interactifs. Réponds, regarde, engage — et décroche des bons exclusifs.
+  </p>
+
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="goSignup()">Commencer gratuitement</button>
+    <button class="btn-secondary" onclick="scrollTo('#quests')">Voir les quêtes</button>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <div class="hstat-num">2 400+</div>
+      <div class="hstat-label">Utilisateurs</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">18</div>
+      <div class="hstat-label">Partenaires</div>
+    </div>
+    <div class="hstat">
+      <div class="hstat-num">340</div>
+      <div class="hstat-label">Bons gagnés</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     QUESTS — section principale, juste après le hero
+     ============================================================ -->
+<section class="quests-main reveal" id="quests">
+  <div class="section-label">Quêtes actives</div>
+  <div class="section-title">Choisis ton défi.</div>
+  <p class="section-sub">Campagnes sponsorisées et commerces locaux — clique pour voir les quêtes.</p>
+
+  <div class="qm-bar">
+    <div class="qm-search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Rechercher un partenaire..." id="qSearch" oninput="filterCards()">
+    </div>
+    <div class="qm-filters">
+      <button class="qf-btn active" onclick="setFilter('all',this)">Tous</button>
+      <button class="qf-btn" onclick="setFilter('sponsored',this)">Sponsorisés</button>
+      <button class="qf-btn" onclick="setFilter('local',this)">Locaux</button>
+    </div>
+  </div>
+
+  <!-- Uber featured -->
+  <div class="qm-featured" data-type="sponsored" data-name="uber" onclick="openPartner('uber')">
+    <div class="qm-card-banner qm-uber">
+      <span class="qm-card-logo">Uber</span>
+      <span class="qm-sponsored-badge">Sponsorisé</span>
+      <span class="qm-reward-badge">20 CHF offerts</span>
+    </div>
+    <div class="qm-card-body">
+      <div class="qm-card-name">Uber — Première course offerte</div>
+      <div class="qm-card-desc">5 quêtes à compléter pour décrocher ton bon de course Uber à Genève.</div>
+      <div class="qm-card-meta">
+        <span class="qm-tag">5 quêtes</span>
+        <span class="qm-tag">30 jours</span>
+        <span class="qm-tag qm-tag-pop">1.2k participants</span>
+        <button class="qm-start-btn">Commencer →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Local grid -->
+  <div class="qm-grid" id="qGrid">
+    <div class="qm-card" data-type="local" data-name="migros" onclick="openPartner('migros')">
+      <div class="qm-card-banner qm-migros"><span class="qm-card-emoji">🛒</span><span class="qm-reward-badge">5 CHF</span></div>
+      <div class="qm-card-body">
+        <div class="qm-card-name">Migros Genève</div>
+        <div class="qm-card-desc">4 quêtes sur les produits du terroir.</div>
+        <div class="qm-card-meta"><span class="qm-tag">4 quêtes</span><button class="qm-start-btn">Voir →</button></div>
+      </div>
+    </div>
+    <div class="qm-card" data-type="local" data-name="cafe shiroshi" onclick="openPartner('shiroshi')">
+      <div class="qm-card-banner qm-shiroshi"><span class="qm-card-emoji">☕</span><span class="qm-reward-badge">Café offert</span></div>
+      <div class="qm-card-body">
+        <div class="qm-card-name">Café Shiroshi</div>
+        <div class="qm-card-desc">3 quêtes pour découvrir notre menu.</div>
+        <div class="qm-card-meta"><span class="qm-tag">3 quêtes</span><button class="qm-start-btn">Voir →</button></div>
+      </div>
+    </div>
+    <div class="qm-card" data-type="local" data-name="cafe volta" onclick="openPartner('volta')">
+      <div class="qm-card-banner qm-volta"><span class="qm-card-emoji">🍵</span><span class="qm-reward-badge">-10%</span></div>
+      <div class="qm-card-body">
+        <div class="qm-card-name">Café Volta</div>
+        <div class="qm-card-desc">3 quêtes autour de nos spécialités.</div>
+        <div class="qm-card-meta"><span class="qm-tag">3 quêtes</span><button class="qm-start-btn">Voir →</button></div>
+      </div>
+    </div>
+    <div class="qm-card" data-type="local" data-name="kebab baba" onclick="openPartner('kebab')">
+      <div class="qm-card-banner qm-kebab"><span class="qm-card-emoji">🥙</span><span class="qm-reward-badge">Boisson</span></div>
+      <div class="qm-card-body">
+        <div class="qm-card-name">Kebab Baba</div>
+        <div class="qm-card-desc">2 quêtes — la recette secrète.</div>
+        <div class="qm-card-meta"><span class="qm-tag">2 quêtes</span><button class="qm-start-btn">Voir →</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="qEmpty" style="display:none;text-align:center;padding:40px 0;color:var(--text3);font-size:15px">Aucun partenaire trouvé.</div>
+</section>
+
+<!-- ============================================================
+     HOW IT WORKS
+     ============================================================ -->
+<section class="how reveal" id="how">
+  <div class="section-label">Comment ça marche</div>
+  <div class="section-title">Simple. Rapide. Réel.</div>
+  <p class="section-sub">Quatre étapes pour passer de curieux à récompensé.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num sn1">1</div>
+      <div class="step-content">
+        <h3>Crée ton compte</h3>
+        <p>Inscription en 30 secondes, aucune carte bancaire requise.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num sn2">2</div>
+      <div class="step-content">
+        <h3>Choisis un partenaire</h3>
+        <p>Uber, Migros, café du coin — explore les campagnes actives.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num sn3">3</div>
+      <div class="step-content">
+        <h3>Complète les quêtes</h3>
+        <p>Quiz, vidéos, actions sociales — déblocage progressif.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num sn4">4</div>
+      <div class="step-content">
+        <h3>Récupère ta récompense</h3>
+        <p>Code QR unique généré instantanément, valable en magasin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     QUEST TYPES
+     ============================================================ -->
+<section class="quest-types reveal">
+  <div class="section-label">Types de quêtes</div>
+  <div class="section-title">Varié. Engageant. Jamais ennuyeux.</div>
+  <p class="section-sub">Chaque partenaire compose ses quêtes parmi cinq formats interactifs.</p>
+
+  <div class="qt-grid">
+
+    <div class="qt-card">
+      <div class="qt-icon" style="background:rgba(255,107,43,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+        </svg>
+      </div>
+      <div class="qt-name">Quiz interactif</div>
+      <div class="qt-desc">Lis le texte du partenaire, réponds aux 4 questions pour valider.</div>
+    </div>
+
+    <div class="qt-card">
+      <div class="qt-icon" style="background:rgba(124,58,237,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+        </svg>
+      </div>
+      <div class="qt-name">Action sociale</div>
+      <div class="qt-desc">Like, follow ou partage un post du partenaire sur Instagram.</div>
+    </div>
+
+    <div class="qt-card">
+      <div class="qt-icon" style="background:rgba(34,197,94,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+      </div>
+      <div class="qt-name">Vidéo + quiz</div>
+      <div class="qt-desc">Regarde la vidéo du partenaire, réponds aux questions ensuite.</div>
+    </div>
+
+    <div class="qt-card">
+      <div class="qt-icon" style="background:rgba(245,158,11,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+      </div>
+      <div class="qt-name">Inscription</div>
+      <div class="qt-desc">Crée un compte partenaire via le lien d'affiliation Qwestify.</div>
+    </div>
+
+    <div class="qt-card" style="grid-column: span 2;">
+      <div class="qt-icon" style="background:rgba(239,68,68,0.1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div class="qt-name">Quête physique</div>
+      <div class="qt-desc">Scan un QR code ou saisis un code sur place lors d'un événement. Idéal pour les vernissages, ouvertures, soirées partenaires.</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================
+     PARTNERS
+     ============================================================ -->
+<section class="partners reveal">
+  <div class="section-label">Partenaires actifs</div>
+  <div class="section-title">Des grandes marques aux cafés du coin.</div>
+  <p class="section-sub">Campagnes sponsorisées et commerces locaux, tous sur la même plateforme.</p>
+
+  <!-- Featured -->
+  <div class="featured-card">
+    <div class="fc-banner">
+      <div class="fc-banner-text">Uber</div>
+      <div class="fc-badge">Sponsorisé</div>
+      <div class="fc-reward">20 CHF offerts</div>
+    </div>
+    <div class="fc-body">
+      <div class="fc-name">Uber — Première course offerte</div>
+      <div class="fc-desc">Complète 5 quêtes sur la campagne Uber et reçois un bon de 20 CHF pour ta prochaine course à Genève.</div>
+      <div class="fc-meta">
+        <span class="meta-tag">30 jours restants</span>
+        <span class="meta-tag">5 quêtes</span>
+        <span class="meta-tag">1.2k participants</span>
+        <button class="btn-fc" onclick="goSignup()">Commencer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Local -->
+  <div class="local-grid">
+    <div class="lc">
+      <div class="lc-top lc-migros"><span class="lc-icon">🛒</span></div>
+      <div class="lc-body">
+        <div class="lc-name">Migros</div>
+        <span class="lc-reward">5 CHF</span>
+      </div>
+    </div>
+    <div class="lc">
+      <div class="lc-top lc-shiroshi"><span class="lc-icon">☕</span></div>
+      <div class="lc-body">
+        <div class="lc-name">Café Shiroshi</div>
+        <span class="lc-reward">Café offert</span>
+      </div>
+    </div>
+    <div class="lc">
+      <div class="lc-top lc-volta"><span class="lc-icon">🍵</span></div>
+      <div class="lc-body">
+        <div class="lc-name">Café Volta</div>
+        <span class="lc-reward">-10%</span>
+      </div>
+    </div>
+    <div class="lc">
+      <div class="lc-top lc-kebab"><span class="lc-icon">🥙</span></div>
+      <div class="lc-body">
+        <div class="lc-name">Kebab Baba</div>
+        <span class="lc-reward">Boisson</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     STREAK
+     ============================================================ -->
+<section class="streak-section reveal">
+  <div class="section-label">Séries quotidiennes</div>
+  <div class="section-title">Reviens chaque jour.<br>Ta série te récompense.</div>
+  <p class="section-sub">Un simple GM quotidien entretient ta flamme et débloque des bonus exclusifs.</p>
+
+  <div class="streak-card">
+    <div class="streak-fire">🔥</div>
+    <h3>7 jours de série</h3>
+    <p>Continue comme ça ! Plus ta série est longue, plus tes récompenses sont grandes.</p>
+
+    <div class="streak-days">
+      <div class="day-dot done">L</div>
+      <div class="day-dot done">M</div>
+      <div class="day-dot done">Me</div>
+      <div class="day-dot done">J</div>
+      <div class="day-dot done">V</div>
+      <div class="day-dot done">S</div>
+      <div class="day-dot today">D</div>
+      <div class="day-dot next">L</div>
+      <div class="day-dot next">M</div>
+    </div>
+
+    <button class="btn-primary" style="max-width:280px;margin:0 auto;display:block" onclick="goSignup()">
+      Démarrer ma série
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA
+     ============================================================ -->
+<section class="cta-section reveal">
+  <div class="cta-inner">
+    <div class="section-label">Prêt ?</div>
+    <div class="section-title">Rejoins Qwestify aujourd'hui.</div>
+    <p class="section-sub" style="margin:0 auto 32px">Gratuit pour les utilisateurs. Inscription en 30 secondes.</p>
+    <button class="btn-primary" style="max-width:300px;margin:0 auto;display:block" onclick="goSignup()">
+      Créer mon compte gratuitement
+    </button>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="footer-logo">
+    <span class="logo-letter ll1" style="width:22px;height:22px;font-size:14px">Q</span>
+    <span class="logo-letter ll2" style="width:22px;height:22px;font-size:14px">U</span>
+    <span class="logo-letter ll3" style="width:22px;height:22px;font-size:14px">E</span>
+    <span class="logo-letter ll4" style="width:22px;height:22px;font-size:14px">S</span>
+    <span class="logo-letter ll5" style="width:22px;height:22px;font-size:14px">T</span>
+    <span class="logo-letter ll6" style="width:22px;height:22px;font-size:14px">I</span>
+    <span class="logo-letter ll7" style="width:22px;height:22px;font-size:14px">F</span>
+    <span class="logo-letter ll8" style="width:22px;height:22px;font-size:14px">Y</span>
+  </div>
+  <div class="footer-links">
+    <a href="#">À propos</a>
+    <a href="#">Partenaires</a>
+    <a href="#">Confidentialité</a>
+    <a href="#">CGU</a>
+    <a href="#">Contact</a>
+  </div>
+  <div class="footer-copy">© 2025 Qwestify — Genève, Suisse</div>
+</footer>
+
+<!-- ============================================================
+     AUTH MODAL
+     ============================================================ -->
+<div id="authOverlay" style="display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center">
+  <div id="authModal" style="background:var(--bg2);border-radius:24px 24px 0 0;padding:32px 24px 40px;width:100%;max-width:480px;border-top:1px solid var(--border2);animation:slideUp 0.35s var(--ease)">
+    <div style="width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 28px"></div>
+    <div id="authContent"></div>
+  </div>
+</div>
+
+<script>
+/* ---- NAVIGATION INTELLIGENTE ---- */
+
+// S'inscrire : affiche onboarding si première visite, sinon modal directement
+function goSignup() {
+  if (!localStorage.getItem('qst-onboarded')) {
+    window.location = 'onboarding.html';
+  } else {
+    showAuth('signup');
+  }
+}
+
+// Clic sur un partenaire : si connecté → page commerçant, sinon → signup
+function openPartner(slug) {
+  if (localStorage.getItem('qst-loggedin')) {
+    window.location = 'commercant.html?p=' + slug;
+  } else {
+    goSignup();
+  }
+}
+
+// Au chargement : si déjà connecté, passer directement à l'app
+window.addEventListener('DOMContentLoaded', () => {
+  if (localStorage.getItem('qst-loggedin')) {
+    const landing = document.getElementById('landing');
+    const app = document.getElementById('app');
+    if (landing && app) {
+      landing.style.display = 'none';
+      app.style.display = 'block';
+    }
+  }
+});
+
+/* ---- FILTER & SEARCH ---- */
+let activeFilter = 'all';
+
+function setFilter(type, btn) {
+  activeFilter = type;
+  document.querySelectorAll('.qf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards() {
+  const q = document.getElementById('qSearch').value.toLowerCase();
+  const featured = document.querySelector('.qm-featured');
+  const cards = document.querySelectorAll('#qGrid .qm-card');
+  let anyVisible = false;
+
+  // featured (uber = sponsored)
+  const fType = featured.dataset.type;
+  const fName = featured.dataset.name;
+  const fMatch = (activeFilter === 'all' || activeFilter === fType) && fName.includes(q);
+  featured.style.display = fMatch ? '' : 'none';
+  if (fMatch) anyVisible = true;
+
+  cards.forEach(card => {
+    const typeMatch = activeFilter === 'all' || card.dataset.type === activeFilter;
+    const nameMatch = card.dataset.name.includes(q);
+    const show = typeMatch && nameMatch;
+    card.style.display = show ? '' : 'none';
+    if (show) anyVisible = true;
+  });
+
+  document.getElementById('qEmpty').style.display = anyVisible ? 'none' : 'block';
+}
+
+/* ---- THEME ---- */
+const html = document.documentElement;
+const saved = localStorage.getItem('qst-theme') || 'dark';
+html.setAttribute('data-theme', saved);
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const current = html.getAttribute('data-theme');
+  const next = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('qst-theme', next);
+});
+
+/* ---- SCROLL REVEAL ---- */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+/* ---- SMOOTH SCROLL ---- */
+function scrollTo(id) {
+  document.querySelector(id)?.scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ---- AUTH MODAL ---- */
+function showAuth(mode) {
+  const overlay = document.getElementById('authOverlay');
+  const content = document.getElementById('authContent');
+
+  if (mode === 'signup') {
+    content.innerHTML = `
+      <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">Créer un compte</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:28px">Gratuit. Pas de carte bancaire.</div>
+      <input id="signEmail" type="email" placeholder="Adresse email" style="${inputStyle}">
+      <input id="signPass" type="password" placeholder="Mot de passe" style="${inputStyle}">
+      <input id="signName" type="text" placeholder="Prénom" style="${inputStyle}">
+      <button onclick="fakeSignup()" style="${btnStyle}">Créer mon compte</button>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text2)">
+        Déjà un compte ? <span onclick="showAuth('login')" style="color:var(--orange);cursor:pointer;font-weight:600">Se connecter</span>
+      </div>
+    `;
+  } else {
+    content.innerHTML = `
+      <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;margin-bottom:6px">Connexion</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:28px">Content de te revoir.</div>
+      <input id="loginEmail" type="email" placeholder="Adresse email" style="${inputStyle}">
+      <input id="loginPass" type="password" placeholder="Mot de passe" style="${inputStyle}">
+      <button onclick="fakeLogin()" style="${btnStyle}">Se connecter</button>
+      <div style="text-align:center;margin-top:14px;font-size:13px;color:var(--text2)">
+        Pas encore de compte ? <span onclick="goSignup()" style="color:var(--orange);cursor:pointer;font-weight:600">S'inscrire</span>
+      </div>
+    `;
+  }
+
+  overlay.style.display = 'flex';
+}
+
+const inputStyle = `
+  display:block;width:100%;padding:13px 16px;
+  background:var(--bg3);border:1px solid var(--border2);
+  border-radius:10px;color:var(--text);
+  font-family:'Inter',sans-serif;font-size:15px;
+  margin-bottom:12px;outline:none;
+  transition:border-color 0.2s;
+`;
+const btnStyle = `
+  display:block;width:100%;padding:14px;
+  background:var(--orange);color:#fff;border:none;
+  border-radius:10px;font-family:'Inter',sans-serif;
+  font-size:15px;font-weight:600;cursor:pointer;margin-top:4px;
+`;
+
+function fakeSignup() {
+  document.getElementById('authContent').innerHTML = `
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:52px;margin-bottom:16px">🎉</div>
+      <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px">Bienvenue sur Qwestify !</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px">Ton compte est créé. Lance-toi !</div>
+      <button onclick="closeAuth()" style="${btnStyle}">Explorer les quêtes</button>
+    </div>
+  `;
+}
+
+function fakeLogin() {
+  closeAuth();
+}
+
+function closeAuth() {
+  document.getElementById('authOverlay').style.display = 'none';
+}
+
+document.getElementById('authOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeAuth();
+});
+
+/* ---- ENTER/EXIT APP ---- */
+function enterApp(name) {
+  closeAuth();
+  localStorage.setItem('qst-loggedin', '1');
+  localStorage.setItem('qst-onboarded', '1');
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  if(name && document.getElementById('appUsername')) document.getElementById('appUsername').textContent = name;
+  window.scrollTo(0,0);
+}
+function exitApp() {
+  localStorage.removeItem('qst-loggedin');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('landing').style.display = 'block';
+  window.scrollTo(0,0);
+}
+function openMenu() { document.getElementById('sideMenu').classList.add('open'); document.getElementById('sideOverlay').classList.add('open'); }
+function closeMenu() { document.getElementById('sideMenu').classList.remove('open'); document.getElementById('sideOverlay').classList.remove('open'); }
+function openPanel() { document.getElementById('rightPanel').classList.add('open'); document.getElementById('rightOverlay').classList.add('open'); }
+function closePanel() { document.getElementById('rightPanel').classList.remove('open'); document.getElementById('rightOverlay').classList.remove('open'); }
+
+let gmClaimed=false, streakCount=7, totalGM=143;
+function claimGM(){
+  if(gmClaimed)return; gmClaimed=true; streakCount++; totalGM++;
+  ['gmStreakVal','gmPanelStreak'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=streakCount; });
+  ['gmTotalVal','gmPanelTotal'].forEach(id=>{ const el=document.getElementById(id); if(el) el.textContent=totalGM; });
+  const btn=document.getElementById('gmClaimBtn');
+  if(btn){btn.textContent='✓ GM validé !';btn.style.opacity='0.5';btn.style.cursor='default';}
+}
+function filterCat(cat,el){document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+function switchTab(tab,el){
+  document.querySelectorAll('.us-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');
+  ['tab-all','tab-progress','tab-new','tab-done','tab-fav'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display='none';});
+  const show=document.getElementById('tab-'+tab);if(show)show.style.display='block';
+}
+
+/* AUTO CAROUSEL */
+function initCarousel(){
+  const slides=document.querySelectorAll('.ac-slide');
+  const dotsWrap=document.getElementById('carouselDots');
+  if(!slides.length||!dotsWrap)return;
+  let cur=0;
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='cdot'+(i===0?' active':'');
+    d.onclick=()=>goTo(i);
+    dotsWrap.appendChild(d);
+  });
+  function goTo(n){
+    slides[cur].classList.remove('active');
+    document.querySelectorAll('.cdot')[cur].classList.remove('active');
+    cur=n;
+    slides[cur].classList.add('active');
+    document.querySelectorAll('.cdot')[cur].classList.add('active');
+  }
+  slides[0].classList.add('active');
+  setInterval(()=>goTo((cur+1)%slides.length),4000);
+}
+window.addEventListener('DOMContentLoaded',initCarousel);
+
+// Patch fakeSignup and fakeLogin to enter app
+const _origSignup = fakeSignup;
+fakeSignup = function() {
+  document.getElementById('authContent').innerHTML = `
+    <div style="text-align:center;padding:20px 0">
+      <div style="font-size:52px;margin-bottom:16px">🎉</div>
+      <div style="font-family:'Inter',sans-serif;font-size:22px;font-weight:800;margin-bottom:8px">Bienvenue sur Qwestify !</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px">Ton compte est créé. Lance-toi !</div>
+      <button onclick="enterApp('Nouveau')" style="display:block;width:100%;padding:14px;background:var(--orange);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:600;cursor:pointer">Explorer les quêtes →</button>
+    </div>
+  `;
+};
+const _origLogin = fakeLogin;
+fakeLogin = function() { closeAuth(); enterApp('Jordan'); };
+
+// Wrap landing content
+window.addEventListener('DOMContentLoaded', () => {
+  const app = document.getElementById('app');
+  const authOverlay = document.getElementById('authOverlay');
+  const wrapper = document.createElement('div');
+  wrapper.id = 'landing';
+  const toWrap = [...document.body.children].filter(el => el !== app && el !== authOverlay);
+  toWrap.forEach(el => wrapper.appendChild(el));
+  document.body.insertBefore(wrapper, app);
+});
+</script>
+
+<!-- ============================================================ APP STYLES ============================================================ -->
+<style>
+#app{display:none;background:var(--bg);min-height:100vh;padding-bottom:70px}
+.app-nav{position:sticky;top:0;z-index:100;height:56px;display:flex;align-items:center;padding:0 12px;gap:8px;background:var(--bg);border-bottom:1px solid var(--border)}
+.app-nav-logo{display:flex;gap:2px;align-items:center;flex:1}
+.anl{font-family:'Inter',sans-serif;font-weight:800;font-size:14px;width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#fff}
+.icon-btn{width:34px;height:34px;border-radius:9px;border:none;background:var(--bg3);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background 0.2s;position:relative}
+.icon-btn:hover{background:var(--border2)}
+.icon-btn svg{width:17px;height:17px}
+.league-badge{display:flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(124,58,237,0.1));border:1px solid rgba(124,58,237,0.3);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--violet2);cursor:pointer;white-space:nowrap}
+.league-dot{width:7px;height:7px;border-radius:50%;background:var(--violet)}
+.avatar-badge{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--violet));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;border:2px solid var(--border2);cursor:pointer;flex-shrink:0;position:relative}
+.lvl-badge{position:absolute;bottom:-4px;right:-4px;background:var(--orange);color:#fff;font-size:9px;font-weight:800;border-radius:5px;padding:1px 4px;border:1px solid var(--bg)}
+.arrow-btn{width:26px;height:26px;border-radius:7px;border:1px solid var(--border2);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);font-size:16px;transition:all 0.2s}
+.side-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity 0.3s}
+.side-overlay.open{opacity:1;pointer-events:all}
+.side-menu{position:fixed;top:0;left:0;bottom:0;width:280px;z-index:201;background:var(--bg2);border-right:1px solid var(--border2);transform:translateX(-100%);transition:transform 0.35s var(--ease);display:flex;flex-direction:column}
+.side-menu.open{transform:translateX(0)}
+.side-header{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.side-user{display:flex;align-items:center;gap:12px}
+.side-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--violet));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;color:#fff}
+.side-name{font-family:'Inter',sans-serif;font-size:16px;font-weight:800}
+.side-level{font-size:12px;color:var(--text2);margin-top:2px}
+.side-links{flex:1;padding:12px;display:flex;flex-direction:column;gap:3px}
+.side-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s;border:none;background:none;text-align:left;width:100%}
+.side-link:hover,.side-link.active{background:var(--bg3);color:var(--text)}
+.side-link svg{width:17px;height:17px;flex-shrink:0}
+.side-footer{padding:14px;border-top:1px solid var(--border)}
+.btn-logout{width:100%;padding:11px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;color:var(--red);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.right-panel{position:fixed;top:0;right:0;bottom:0;width:290px;z-index:201;background:var(--bg2);border-left:1px solid var(--border2);transform:translateX(100%);transition:transform 0.35s var(--ease);display:flex;flex-direction:column}
+.right-panel.open{transform:translateX(0)}
+.rp-header{padding:18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.rp-title{font-family:'Inter',sans-serif;font-size:17px;font-weight:800}
+.rp-close{font-size:20px;cursor:pointer;color:var(--text2);background:none;border:none}
+.rp-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.gm-card{background:linear-gradient(135deg,rgba(245,158,11,0.1),rgba(255,107,43,0.06));border:1px solid rgba(245,158,11,0.25);border-radius:16px;padding:18px;text-align:center}
+.gm-fire{font-size:38px;margin-bottom:8px}
+.gm-label{font-family:'Inter',sans-serif;font-size:15px;font-weight:800;margin-bottom:4px}
+.gm-sub{font-size:12px;color:var(--text2);margin-bottom:14px}
+.gm-stats{display:flex;gap:16px;justify-content:center;margin-bottom:14px}
+.gm-stat-num{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:var(--yellow)}
+.gm-stat-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:1px}
+.gm-btn{width:100%;padding:11px;background:linear-gradient(135deg,var(--yellow),var(--orange));border:none;border-radius:10px;color:#fff;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+.streak-row{display:flex;gap:5px;justify-content:center;margin-top:12px}
+.s-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
+.s-dot.ok{background:var(--yellow);color:#000}
+.s-dot.today-dot{background:var(--orange);color:#fff;box-shadow:0 0 10px rgba(255,107,43,0.5)}
+.s-dot.empty{background:var(--bg3);border:1px solid var(--border);color:var(--text3)}
+.rp-info-row{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
+.rp-info-label{font-size:13px;color:var(--text2)}
+.rp-info-val{font-family:'Inter',sans-serif;font-size:14px;font-weight:700}
+.carousel-wrap{padding:20px 0 0}
+.carousel-label{font-size:10px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;padding:0 16px 10px}
+.carousel-track{display:flex;gap:10px;overflow-x:auto;padding:0 16px 16px;scrollbar-width:none}
+.carousel-track::-webkit-scrollbar{display:none}
+.c-card{min-width:240px;border-radius:16px;overflow:hidden;border:1px solid var(--border);flex-shrink:0;cursor:pointer;transition:all 0.25s;background:var(--bg2)}
+.c-card:hover{border-color:var(--orange);transform:translateY(-2px)}
+.c-banner{height:120px;position:relative;display:flex;align-items:flex-end;padding:10px}
+.c-uber{background:linear-gradient(135deg,#000,#1c1c1c)}
+.c-migros{background:linear-gradient(135deg,#EA580C,#C2410C)}
+.c-shiroshi{background:linear-gradient(135deg,#4C1D95,#6D28D9)}
+.c-volta{background:linear-gradient(135deg,#065F46,#047857)}
+.c-kebab{background:linear-gradient(135deg,#92400E,#B45309)}
+.c-banner::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7) 0%,transparent 60%)}
+.c-brand{font-family:'Inter',sans-serif;font-size:22px;font-weight:800;color:#fff;z-index:1}
+.c-badge-top{position:absolute;top:8px;right:8px;z-index:1;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--green);font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
+.c-sponsored{position:absolute;top:8px;left:8px;z-index:1;background:var(--yellow);color:#000;font-size:9px;font-weight:800;letter-spacing:1px;padding:2px 6px;border-radius:4px;text-transform:uppercase}
+.c-body{padding:12px}
+.c-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px}
+.c-meta{display:flex;gap:6px}
+.c-tag{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:2px 7px;font-size:10px;color:var(--text2);font-weight:600}
+.c-progress{margin-top:8px}
+.c-prog-bar{height:3px;background:var(--bg3);border-radius:2px;margin-top:3px}
+.c-prog-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.c-prog-label{font-size:10px;color:var(--text3)}
+.user-space{padding:20px 16px 0}
+.us-title{font-family:'Inter',sans-serif;font-size:17px;font-weight:800;margin-bottom:12px}
+.us-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.us-tab{padding:6px 13px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.us-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.us-quest-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+.us-quest-item:hover{border-color:var(--border2);transform:translateX(3px)}
+.us-qi-logo{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.us-qi-info{flex:1}
+.us-qi-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;margin-bottom:2px}
+.us-qi-sub{font-size:11px;color:var(--text2)}
+.us-qi-prog{margin-top:6px}
+.us-qi-bar{height:3px;background:var(--bg3);border-radius:2px}
+.us-qi-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.us-qi-right{text-align:right;flex-shrink:0}
+.us-qi-pct{font-family:'Inter',sans-serif;font-size:13px;font-weight:800;color:var(--orange)}
+.us-qi-steps{font-size:10px;color:var(--text3);margin-top:1px}
+.us-done-item{background:var(--bg2);border:1px solid rgba(34,197,94,0.15);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.done-check{width:34px;height:34px;border-radius:9px;background:rgba(34,197,94,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.done-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:700}
+.done-reward{font-size:11px;color:var(--green);margin-top:2px}
+.done-date{font-size:10px;color:var(--text3);margin-left:auto;flex-shrink:0}
+.categories{padding:24px 16px 0}
+.cat-scroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin-top:12px}
+.cat-scroll::-webkit-scrollbar{display:none}
+.cat-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);cursor:pointer;transition:all 0.2s;flex-shrink:0;min-width:68px}
+.cat-btn.active{border-color:var(--orange);background:rgba(255,107,43,0.06)}
+.cat-icon{font-size:20px}
+.cat-label{font-size:10px;font-weight:700;color:var(--text2);white-space:nowrap}
+.cat-btn.active .cat-label{color:var(--orange)}
+.earn-section{padding:24px 16px 0}
+.earn-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.earn-card{border-radius:14px;padding:18px 14px;border:1px solid var(--border)}
+.earn-card-1{background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(34,197,94,0.03));border-color:rgba(34,197,94,0.15)}
+.earn-card-2{background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(124,58,237,0.03));border-color:rgba(124,58,237,0.15)}
+.earn-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.earn-name{font-family:'Inter',sans-serif;font-size:13px;font-weight:800;margin-bottom:5px}
+.earn-desc{font-size:11px;color:var(--text2);line-height:1.5}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;height:58px;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 4px}
+
+/* AUTO CAROUSEL */
+.auto-carousel{overflow:hidden;position:relative;margin:0 16px;border-radius:18px}
+.ac-slide{display:none;animation:fadeIn 0.5s var(--ease)}
+.ac-slide.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ac-card{background:var(--bg2);border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:border-color 0.2s}
+.ac-card:hover{border-color:var(--orange)}
+.ac-banner{height:140px;position:relative;display:flex;align-items:center;justify-content:center}
+.ac-brand-logo{z-index:1}
+.ac-body{padding:16px}
+.ac-partner{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:0.5px;margin-bottom:4px}
+.ac-name{font-size:17px;font-weight:800;margin-bottom:6px;letter-spacing:-0.3px}
+.ac-desc{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:12px}
+.ac-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.ac-prog-wrap{}
+.carousel-dots{display:flex;gap:6px;align-items:center}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--border2);transition:all 0.3s;cursor:pointer}
+.cdot.active{width:18px;border-radius:3px;background:var(--orange)}
+
+/* NEW PARTNER COLORS */
+.c-hybride{background:linear-gradient(135deg,#065F46,#0D9488)}
+.c-vtc{background:linear-gradient(135deg,#1E3A5F,#2563EB)}
+
+/* LIST SECTIONS (Nouveau / Tendances) */
+.list-section{padding:24px 16px 0}
+.ls-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ls-title{font-size:18px;font-weight:800;letter-spacing:-0.3px}
+.ls-see-all{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s}
+.ls-see-all:hover{color:var(--text);border-color:var(--border2)}
+.ls-list{display:flex;flex-direction:column;gap:2px}
+.ls-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity 0.2s}
+.ls-item:last-child{border-bottom:none}
+.ls-item:hover{opacity:0.75}
+.ls-logo{width:52px;height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ls-info{flex:1;min-width:0}
+.ls-partner{font-size:11px;color:var(--text3);font-weight:600;margin-bottom:3px}
+.ls-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.ls-participants{font-size:12px;color:var(--text3)}
+.ls-reward{flex-shrink:0}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;border-radius:8px;border:none;background:none;cursor:pointer;color:var(--text3);transition:all 0.2s;flex:1}
+.bnav-btn.active{color:var(--orange)}
+.bnav-btn svg{width:19px;height:19px}
+.bnav-label{font-size:9px;font-weight:700;letter-spacing:0.5px}
+</style>
+
+<!-- ============================================================ APP HTML ============================================================ -->
+<div id="app">
+  <div class="side-overlay" id="sideOverlay" onclick="closeMenu()"></div>
+  <div class="side-menu" id="sideMenu">
+    <div class="side-header">
+      <div class="side-user">
+        <div class="side-avatar">J</div>
+        <div><div class="side-name" id="appUsername">Jordan</div><div class="side-level">Niveau 22 — Ligue Or</div></div>
+      </div>
+      <button onclick="closeMenu()" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text2)">✕</button>
+    </div>
+    <div class="side-links">
+      <button class="side-link active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Accueil</button>
+      <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>Explorer</button>
+      <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Mes quêtes</button>
+      <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mon profil</button>
+      <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Dashboard commerçant</button>
+      <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M20 12h-2M6 12H4M18.66 18.66l-1.41-1.41M6.75 6.75L5.34 5.34M12 20v-2M12 6V4"/></svg>Paramètres</button>
+    </div>
+    <div class="side-footer"><button class="btn-logout" onclick="exitApp()">Se déconnecter</button></div>
+  </div>
+
+  <div class="side-overlay" id="rightOverlay" onclick="closePanel()"></div>
+  <div class="right-panel" id="rightPanel">
+    <div class="rp-header"><div class="rp-title">Mon espace</div><button class="rp-close" onclick="closePanel()">✕</button></div>
+    <div class="rp-body">
+      <div class="gm-card">
+        <div class="gm-fire">🔥</div>
+        <div class="gm-label">Good Morning !</div>
+        <div class="gm-sub">Valide ton GM quotidien pour maintenir ta série</div>
+        <div class="gm-stats">
+          <div class="gm-stat"><div class="gm-stat-num" id="gmPanelStreak">7</div><div class="gm-stat-label">Série</div></div>
+          <div class="gm-stat"><div class="gm-stat-num" id="gmPanelTotal">143</div><div class="gm-stat-label">Total GM</div></div>
+        </div>
+        <div class="streak-row">
+          <div class="s-dot ok">L</div><div class="s-dot ok">M</div><div class="s-dot ok">Me</div><div class="s-dot ok">J</div><div class="s-dot ok">V</div><div class="s-dot ok">S</div><div class="s-dot today-dot">D</div><div class="s-dot empty">L</div>
+        </div>
+        <div style="margin-top:14px"><button class="gm-btn" id="gmClaimBtn" onclick="claimGM()">☀️ GM — Valider aujourd'hui</button></div>
+      </div>
+      <div class="rp-info-row"><span class="rp-info-label">Niveau</span><span class="rp-info-val">22</span></div>
+      <div class="rp-info-row"><span class="rp-info-label">Ligue</span><span class="rp-info-val" style="color:var(--violet2)">Or</span></div>
+      <div class="rp-info-row"><span class="rp-info-label">Quêtes terminées</span><span class="rp-info-val">14</span></div>
+      <div class="rp-info-row"><span class="rp-info-label">Bons gagnés</span><span class="rp-info-val" style="color:var(--green)">9 CHF + 2 offerts</span></div>
+      <div class="rp-info-row"><span class="rp-info-label">Série GM</span><span class="rp-info-val" style="color:var(--yellow)" id="gmStreakVal">7</span></div>
+      <div class="rp-info-row"><span class="rp-info-label">Total GM</span><span class="rp-info-val" id="gmTotalVal">143</span></div>
+    </div>
+  </div>
+
+  <nav class="app-nav">
+    <button class="icon-btn" onclick="openMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <div class="app-nav-logo"><span class="anl ll1">Q</span><span class="anl ll2">U</span><span class="anl ll3">E</span><span class="anl ll4">S</span><span class="anl ll5">T</span><span class="anl ll6">I</span><span class="anl ll7">F</span><span class="anl ll8">Y</span></div>
+    <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <div class="league-badge"><div class="league-dot"></div>Ligue Or</div>
+    <div class="avatar-badge" onclick="openPanel()">J<span class="lvl-badge">22</span></div>
+    <button class="arrow-btn" onclick="openPanel()">›</button>
+  </nav>
+
+  <div>
+    <!-- AUTO-CAROUSEL TOP CAMPAGNES -->
+    <div class="carousel-wrap" style="padding-top:16px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px 10px">
+        <div class="carousel-label" style="padding:0;margin:0">Top campagnes</div>
+        <div class="carousel-dots" id="carouselDots"></div>
+      </div>
+      <div class="auto-carousel" id="autoCarousel">
+        <div class="ac-slide">
+          <div class="ac-card" onclick="window.location='commercant.html'">
+            <div class="ac-banner c-uber">
+              <span class="c-sponsored">Sponsorisé</span>
+              <span class="c-badge-top">20 CHF</span>
+              <div class="ac-brand-logo"><span style="font-size:32px;font-weight:900;color:#fff;letter-spacing:-1px">Uber</span></div>
+            </div>
+            <div class="ac-body">
+              <div class="ac-partner">Uber Genève</div>
+              <div class="ac-name">Première course offerte</div>
+              <div class="ac-desc">Complète 5 quêtes et reçois 20 CHF pour ta prochaine course.</div>
+              <div class="ac-meta">
+                <span class="c-tag">5 quêtes</span>
+                <span class="c-tag">30j restants</span>
+                <span class="c-tag" style="color:var(--orange);border-color:rgba(255,107,43,0.3)">1 247 participants</span>
+              </div>
+              <div class="ac-prog-wrap">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px"><span>Ta progression</span><span>2/5</span></div>
+                <div class="c-prog-bar"><div class="c-prog-fill" style="width:40%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ac-slide">
+          <div class="ac-card">
+            <div class="ac-banner c-hybride">
+              <div class="ac-brand-logo"><span style="font-size:22px;font-weight:900;color:#fff;letter-spacing:-0.5px">Dr. Hybride</span></div>
+              <span class="c-badge-top">Diagnostic offert</span>
+            </div>
+            <div class="ac-body">
+              <div class="ac-partner">Docteur Hybride</div>
+              <div class="ac-name">Spécialiste batteries hybrides</div>
+              <div class="ac-desc">Découvre nos services et décroche un diagnostic gratuit de ta batterie hybride.</div>
+              <div class="ac-meta">
+                <span class="c-tag">3 quêtes</span>
+                <span class="c-tag">Local</span>
+                <span class="c-tag" style="color:var(--orange);border-color:rgba(255,107,43,0.3)">89 participants</span>
+              </div>
+              <div class="ac-prog-wrap">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px"><span>Ta progression</span><span>0/3</span></div>
+                <div class="c-prog-bar"><div class="c-prog-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ac-slide">
+          <div class="ac-card">
+            <div class="ac-banner c-vtc">
+              <div class="ac-brand-logo"><span style="font-size:24px;font-weight:900;color:#fff;letter-spacing:-0.5px">DriveGVA</span></div>
+              <span class="c-badge-top">1 course offerte</span>
+            </div>
+            <div class="ac-body">
+              <div class="ac-partner">DriveGVA — Location VTC</div>
+              <div class="ac-name">Chauffeurs pro à Genève</div>
+              <div class="ac-desc">Location de taxi et VTC pour chauffeurs professionnels. Complète les quêtes et obtiens ta première course.</div>
+              <div class="ac-meta">
+                <span class="c-tag">4 quêtes</span>
+                <span class="c-tag">Local</span>
+                <span class="c-tag" style="color:var(--orange);border-color:rgba(255,107,43,0.3)">312 participants</span>
+              </div>
+              <div class="ac-prog-wrap">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px"><span>Ta progression</span><span>0/4</span></div>
+                <div class="c-prog-bar"><div class="c-prog-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ac-slide">
+          <div class="ac-card">
+            <div class="ac-banner c-migros">
+              <div class="ac-brand-logo"><span style="font-size:28px;font-weight:900;color:#fff">Migros</span></div>
+              <span class="c-badge-top">5 CHF</span>
+            </div>
+            <div class="ac-body">
+              <div class="ac-partner">Migros Genève</div>
+              <div class="ac-name">Produits du terroir genevois</div>
+              <div class="ac-desc">Découvre les produits locaux Migros Genève et remporte un bon de 5 CHF.</div>
+              <div class="ac-meta">
+                <span class="c-tag">4 quêtes</span>
+                <span class="c-tag">Local</span>
+                <span class="c-tag" style="color:var(--orange);border-color:rgba(255,107,43,0.3)">534 participants</span>
+              </div>
+              <div class="ac-prog-wrap">
+                <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text3);margin-bottom:5px"><span>Ta progression</span><span>0/4</span></div>
+                <div class="c-prog-bar"><div class="c-prog-fill" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MES QUÊTES -->
+    <div class="user-space">
+      <div class="us-title">Mes quêtes</div>
+      <div class="us-tabs">
+        <button class="us-tab active" onclick="switchTab('all',this)">Tous</button>
+        <button class="us-tab" onclick="switchTab('progress',this)">En cours (2)</button>
+        <button class="us-tab" onclick="switchTab('new',this)">Nouvelles</button>
+        <button class="us-tab" onclick="switchTab('done',this)">Terminées (3)</button>
+        <button class="us-tab" onclick="switchTab('fav',this)">Favoris ★</button>
+      </div>
+
+      <div id="tab-all">
+        <div class="us-quest-item" onclick="window.location='commercant.html'"><div class="us-qi-logo c-uber" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff">Uber</span></div><div class="us-qi-info"><div class="us-qi-name">Uber — Première course</div><div class="us-qi-sub">Quête 3/5 — Créer un compte Uber</div><div class="us-qi-prog"><div class="us-qi-bar"><div class="us-qi-fill" style="width:40%"></div></div></div></div><div class="us-qi-right"><div class="us-qi-pct">40%</div><div class="us-qi-steps">2/5</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-volta" style="border-radius:9px"><span style="font-size:18px">🍵</span></div><div class="us-qi-info"><div class="us-qi-name">Café Volta</div><div class="us-qi-sub">Quête 2/3 — Like Instagram</div><div class="us-qi-prog"><div class="us-qi-bar"><div class="us-qi-fill" style="width:33%"></div></div></div></div><div class="us-qi-right"><div class="us-qi-pct">33%</div><div class="us-qi-steps">1/3</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-migros" style="border-radius:9px"><span style="font-size:18px">🛒</span></div><div class="us-qi-info"><div class="us-qi-name">Migros — Terroir genevois</div><div class="us-qi-sub">4 quêtes — 5 CHF</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-shiroshi" style="border-radius:9px"><span style="font-size:18px">☕</span></div><div class="us-qi-info"><div class="us-qi-name">Café Shiroshi</div><div class="us-qi-sub">3 quêtes — 1 café offert</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-hybride" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff;text-align:center;line-height:1.2">Dr. Hybride</span></div><div class="us-qi-info"><div class="us-qi-name">Docteur Hybride</div><div class="us-qi-sub">3 quêtes — Diagnostic offert</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-vtc" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff">DriveGVA</span></div><div class="us-qi-info"><div class="us-qi-name">DriveGVA — VTC</div><div class="us-qi-sub">4 quêtes — 1 course offerte</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-done-item"><div class="done-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="done-name">Café Volta — Vernissage</div><div class="done-reward">Bon -10% utilisé</div></div><div class="done-date">3j</div></div>
+        <div class="us-done-item"><div class="done-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="done-name">Kebab Baba</div><div class="done-reward">Boisson réclamée</div></div><div class="done-date">1sem</div></div>
+      </div>
+
+      <div id="tab-progress" style="display:none">
+        <div class="us-quest-item" onclick="window.location='commercant.html'"><div class="us-qi-logo c-uber" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff">Uber</span></div><div class="us-qi-info"><div class="us-qi-name">Uber — Première course</div><div class="us-qi-sub">Quête 3/5 — Créer un compte Uber</div><div class="us-qi-prog"><div class="us-qi-bar"><div class="us-qi-fill" style="width:40%"></div></div></div></div><div class="us-qi-right"><div class="us-qi-pct">40%</div><div class="us-qi-steps">2/5</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-volta" style="border-radius:9px"><span style="font-size:18px">🍵</span></div><div class="us-qi-info"><div class="us-qi-name">Café Volta</div><div class="us-qi-sub">Quête 2/3 — Like Instagram</div><div class="us-qi-prog"><div class="us-qi-bar"><div class="us-qi-fill" style="width:33%"></div></div></div></div><div class="us-qi-right"><div class="us-qi-pct">33%</div><div class="us-qi-steps">1/3</div></div></div>
+      </div>
+
+      <div id="tab-new" style="display:none">
+        <div class="us-quest-item"><div class="us-qi-logo c-migros" style="border-radius:9px"><span style="font-size:18px">🛒</span></div><div class="us-qi-info"><div class="us-qi-name">Migros — Terroir genevois</div><div class="us-qi-sub">4 quêtes — 5 CHF · 534 participants</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-shiroshi" style="border-radius:9px"><span style="font-size:18px">☕</span></div><div class="us-qi-info"><div class="us-qi-name">Café Shiroshi</div><div class="us-qi-sub">3 quêtes — Café offert · 67 participants</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-hybride" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff;text-align:center;line-height:1.2">Dr. Hybride</span></div><div class="us-qi-info"><div class="us-qi-name">Docteur Hybride</div><div class="us-qi-sub">3 quêtes — Diagnostic offert · 89 participants</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-vtc" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff">DriveGVA</span></div><div class="us-qi-info"><div class="us-qi-name">DriveGVA — VTC Pro</div><div class="us-qi-sub">4 quêtes — Course offerte · 312 participants</div></div><div class="us-qi-right"><div class="us-qi-pct" style="color:var(--green)">NEW</div></div></div>
+      </div>
+
+      <div id="tab-done" style="display:none">
+        <div class="us-done-item"><div class="done-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="done-name">Café Volta — Vernissage</div><div class="done-reward">Bon -10% utilisé</div></div><div class="done-date">3j</div></div>
+        <div class="us-done-item"><div class="done-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="done-name">Kebab Baba</div><div class="done-reward">Boisson réclamée</div></div><div class="done-date">1sem</div></div>
+        <div class="us-done-item"><div class="done-check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><div><div class="done-name">Café Shiroshi</div><div class="done-reward">Café offert réclamé</div></div><div class="done-date">2sem</div></div>
+      </div>
+
+      <div id="tab-fav" style="display:none">
+        <div class="us-quest-item" onclick="window.location='commercant.html'"><div class="us-qi-logo c-uber" style="border-radius:9px"><span style="font-size:10px;font-weight:800;color:#fff">Uber</span></div><div class="us-qi-info"><div class="us-qi-name">Uber — Première course</div><div class="us-qi-sub">En cours · 2/5 quêtes</div></div><div class="us-qi-right"><div style="font-size:18px">★</div></div></div>
+        <div class="us-quest-item"><div class="us-qi-logo c-shiroshi" style="border-radius:9px"><span style="font-size:18px">☕</span></div><div class="us-qi-info"><div class="us-qi-name">Café Shiroshi</div><div class="us-qi-sub">Nouveau · 3 quêtes</div></div><div class="us-qi-right"><div style="font-size:18px">★</div></div></div>
+      </div>
+    </div>
+
+    <!-- CATÉGORIES -->
+    <div class="categories">
+      <div class="carousel-label">Catégories</div>
+      <div class="cat-scroll">
+        <button class="cat-btn active" onclick="filterCat('all',this)"><span class="cat-icon">⚡</span><span class="cat-label">Tous</span></button>
+        <button class="cat-btn" onclick="filterCat('restaurant',this)"><span class="cat-icon">🍽️</span><span class="cat-label">Restauration</span></button>
+        <button class="cat-btn" onclick="filterCat('transport',this)"><span class="cat-icon">🚗</span><span class="cat-label">Transport</span></button>
+        <button class="cat-btn" onclick="filterCat('shopping',this)"><span class="cat-icon">🛍️</span><span class="cat-label">Shopping</span></button>
+        <button class="cat-btn" onclick="filterCat('cafe',this)"><span class="cat-icon">☕</span><span class="cat-label">Cafés</span></button>
+        <button class="cat-btn" onclick="filterCat('sante',this)"><span class="cat-icon">🏥</span><span class="cat-label">Santé</span></button>
+        <button class="cat-btn" onclick="filterCat('sport',this)"><span class="cat-icon">💪</span><span class="cat-label">Sport</span></button>
+      </div>
+    </div>
+
+    <!-- GAGNE CHAQUE JOUR -->
+    <div class="earn-section">
+      <div class="carousel-label">Qwestify — Gagne chaque jour</div>
+      <div class="earn-grid">
+        <div class="earn-card earn-card-1"><div class="earn-icon" style="background:rgba(34,197,94,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><div class="earn-name">Gagne chaque jour</div><div class="earn-desc">Complète des quêtes et reçois tes bons instantanément.</div></div>
+        <div class="earn-card earn-card-2"><div class="earn-icon" style="background:rgba(124,58,237,0.15)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--violet2)" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="earn-name">Découvre ta ville</div><div class="earn-desc">Explore les commerçants locaux et leurs offres exclusives.</div></div>
+      </div>
+    </div>
+
+    <!-- NOUVEAU — style Layer3 -->
+    <div class="list-section">
+      <div class="ls-header">
+        <div class="ls-title">Nouveau</div>
+        <button class="ls-see-all">Afficher tout</button>
+      </div>
+      <div class="ls-list">
+        <div class="ls-item" onclick="window.location='commercant.html'">
+          <div class="ls-logo c-hybride"><span style="font-size:9px;font-weight:800;color:#fff;text-align:center;line-height:1.2">Dr.<br>Hybride</span></div>
+          <div class="ls-info">
+            <div class="ls-partner">Docteur Hybride</div>
+            <div class="ls-name">Batteries hybrides — Diagnostic offert</div>
+            <div class="ls-participants">89 Participants</div>
+          </div>
+          <div class="ls-reward">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-logo c-vtc"><span style="font-size:9px;font-weight:800;color:#fff">Drive GVA</span></div>
+          <div class="ls-info">
+            <div class="ls-partner">DriveGVA</div>
+            <div class="ls-name">Location VTC — Chauffeurs pro</div>
+            <div class="ls-participants">312 Participants</div>
+          </div>
+          <div class="ls-reward">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-logo c-shiroshi"><span style="font-size:18px">☕</span></div>
+          <div class="ls-info">
+            <div class="ls-partner">Café Shiroshi</div>
+            <div class="ls-name">Découvre notre menu — Café offert</div>
+            <div class="ls-participants">67 Participants</div>
+          </div>
+          <div class="ls-reward">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TENDANCES — style Layer3 -->
+    <div class="list-section" style="padding-bottom:32px">
+      <div class="ls-header">
+        <div class="ls-title">Tendances</div>
+        <button class="ls-see-all">Afficher tout</button>
+      </div>
+      <div class="ls-list">
+        <div class="ls-item" onclick="window.location='commercant.html'">
+          <div class="ls-logo c-uber"><span style="font-size:10px;font-weight:800;color:#fff">Uber</span></div>
+          <div class="ls-info">
+            <div class="ls-partner">Uber Genève</div>
+            <div class="ls-name">Première course — 20 CHF offerts</div>
+            <div class="ls-participants">1 247 Participants</div>
+          </div>
+          <div class="ls-reward">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-logo c-migros"><span style="font-size:18px">🛒</span></div>
+          <div class="ls-info">
+            <div class="ls-partner">Migros Genève</div>
+            <div class="ls-name">Terroir genevois — 5 CHF</div>
+            <div class="ls-participants">534 Participants</div>
+          </div>
+          <div class="ls-reward">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+        <div class="ls-item">
+          <div class="ls-logo c-kebab"><span style="font-size:18px">🥙</span></div>
+          <div class="ls-info">
+            <div class="ls-partner">Kebab Baba</div>
+            <div class="ls-name">La recette secrète — Boisson offerte</div>
+            <div class="ls-participants">203 Participants</div>
+          </div>
+          <div class="ls-reward">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="13" rx="2" fill="rgba(245,158,11,0.15)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z" stroke="rgba(245,158,11,0.6)" stroke-width="1.5"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <nav class="bottom-nav">
+    <button class="bnav-btn active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="bnav-label">Accueil</span></button>
+    <button class="bnav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="bnav-label">Explorer</span></button>
+    <button class="bnav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span class="bnav-label">Quêtes</span></button>
+    <button class="bnav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnav-label">Profil</span></button>
+  </nav>
+</div>
+
+</body>
+</html>

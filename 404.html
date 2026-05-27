@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Page introuvable</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--orange2:#FF8C55;--violet:#7C3AED;--green:#22C55E;--yellow:#F59E0B}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#fff;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;-webkit-font-smoothing:antialiased;overflow:hidden;position:relative}
+
+/* BG GLOW */
+.bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-glow::before{content:'';position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,43,0.08) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-60%)}
+.bg-glow::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,0.06) 0%,transparent 70%);bottom:0;right:0}
+
+.content{position:relative;z-index:1;max-width:360px}
+
+/* LOGO */
+.logo{display:flex;gap:2px;justify-content:center;margin-bottom:40px}
+.ll{font-weight:900;font-size:16px;width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;color:#fff}
+.ll1{background:var(--orange)}.ll2{background:var(--green)}.ll3{background:var(--violet)}.ll4{background:var(--yellow)}.ll5{background:#E11D48}.ll6{background:#0891B2}.ll7{background:var(--green)}.ll8{background:var(--orange)}
+
+/* 404 */
+.error-code{font-size:96px;font-weight:900;letter-spacing:-6px;line-height:1;margin-bottom:8px;background:linear-gradient(135deg,var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+.quest-lost{display:inline-flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;color:var(--text3);margin-bottom:20px}
+.quest-dot{width:6px;height:6px;border-radius:50%;background:var(--red)}
+
+h1{font-size:24px;font-weight:900;letter-spacing:-0.5px;margin-bottom:10px}
+p{font-size:15px;color:var(--text2);line-height:1.6;margin-bottom:32px}
+
+/* BUTTONS */
+.btn-home{display:block;width:100%;padding:14px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;text-decoration:none;margin-bottom:10px}
+.btn-home:hover{background:var(--orange2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,107,43,0.35)}
+.btn-back{display:block;width:100%;padding:13px;background:transparent;color:var(--text2);border:1px solid var(--border2);border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.btn-back:hover{background:var(--bg3);color:var(--text)}
+
+/* SUGGESTIONS */
+.suggestions{margin-top:40px;padding-top:24px;border-top:1px solid var(--border)}
+.sug-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:14px}
+.sug-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.sug-link{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s;text-decoration:none}
+.sug-link:hover{border-color:var(--border2);color:var(--text)}
+
+/* THEME TOGGLE */
+.theme-toggle{position:fixed;top:16px;right:16px;width:44px;height:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;cursor:pointer;position:fixed}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px);background:var(--orange)}
+</style>
+</head>
+<body>
+
+<div class="bg-glow"></div>
+<button class="theme-toggle" id="themeToggle" style="position:fixed;top:16px;right:16px;z-index:10"></button>
+
+<div class="content">
+  <div class="logo">
+    <span class="ll ll1">Q</span><span class="ll ll2">W</span><span class="ll ll3">E</span><span class="ll ll4">S</span><span class="ll ll5">T</span><span class="ll ll6">I</span><span class="ll ll7">F</span><span class="ll ll8">Y</span>
+  </div>
+
+  <div class="error-code">404</div>
+
+  <div class="quest-lost">
+    <div class="quest-dot"></div>
+    Quête introuvable
+  </div>
+
+  <h1>Cette page a disparu !</h1>
+  <p>La page que tu cherches n'existe pas ou a été déplacée. Retourne à l'accueil pour continuer tes quêtes.</p>
+
+  <a class="btn-home" href="index.html">Retourner à l'accueil</a>
+  <a class="btn-back" href="javascript:history.back()">← Page précédente</a>
+
+  <div class="suggestions">
+    <div class="sug-label">Tu cherchais peut-être</div>
+    <div class="sug-links">
+      <a class="sug-link" href="index.html">Quêtes</a>
+      <a class="sug-link" href="profil.html">Mon profil</a>
+      <a class="sug-link" href="classement.html">Classement</a>
+      <a class="sug-link" href="legal.html">CGU</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const html=document.documentElement;
+html.setAttribute('data-theme',localStorage.getItem('qst-theme')||'dark');
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+</script>
+</body>
+</html>

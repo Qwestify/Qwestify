@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--orange2:#FF8C55;--violet:#7C3AED;--green:#22C55E;--red:#EF4444;--yellow:#F59E0B}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#FFFFFF;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:40px}
+
+/* NAV */
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg2);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.nav-logo{font-size:16px;font-weight:900;letter-spacing:-0.5px}
+.nav-logo span{color:var(--orange)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.admin-badge{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:var(--red);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:0.5px}
+.theme-toggle{width:44px;height:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;cursor:pointer;position:relative}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px);background:var(--orange)}
+
+/* TABS */
+.admin-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--bg2);overflow-x:auto;scrollbar-width:none}
+.admin-tabs::-webkit-scrollbar{display:none}
+.atab{padding:14px 18px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s}
+.atab.active{color:var(--orange);border-bottom-color:var(--orange)}
+.atab:hover{color:var(--text)}
+
+/* VIEWS */
+.view{display:none;padding:16px;animation:fadeIn 0.3s var(--ease)}
+.view.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION TITLE */
+.sec-title{font-size:18px;font-weight:800;letter-spacing:-0.3px;margin-bottom:16px}
+.sec-sub{font-size:13px;color:var(--text2);margin-top:-10px;margin-bottom:16px;line-height:1.5}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px}
+.sc-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+.sc-num{font-size:28px;font-weight:900;letter-spacing:-1px;margin-bottom:2px}
+.sc-trend{font-size:12px;color:var(--green);font-weight:600}
+.sc-trend.down{color:var(--red)}
+
+/* CAMPAIGN CARDS */
+.campaign-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px}
+.cc-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.cc-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.cc-info{flex:1}
+.cc-name{font-size:15px;font-weight:700;margin-bottom:2px}
+.cc-meta{font-size:12px;color:var(--text2)}
+.cc-toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.cc-toggle input{opacity:0;width:0;height:0}
+.cc-slider{position:absolute;inset:0;border-radius:12px;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;transition:0.3s}
+.cc-slider::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text3);transition:0.3s}
+.cc-toggle input:checked+.cc-slider{background:rgba(34,197,94,0.2);border-color:var(--green)}
+.cc-toggle input:checked+.cc-slider::after{transform:translateX(20px);background:var(--green)}
+
+.cc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.css-item{background:var(--bg3);border-radius:8px;padding:8px;text-align:center}
+.css-num{font-size:16px;font-weight:800;margin-bottom:2px}
+.css-label{font-size:10px;color:var(--text3);font-weight:600;text-transform:uppercase}
+
+.cc-actions{display:flex;gap:8px}
+.btn-sm{padding:8px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:'Inter',sans-serif;transition:all 0.2s}
+.btn-sm:hover{background:var(--bg3);color:var(--text)}
+.btn-sm.primary{background:var(--orange);border-color:var(--orange);color:#fff}
+.btn-sm.primary:hover{background:var(--orange2)}
+.btn-sm.danger{color:var(--red);border-color:rgba(239,68,68,0.3)}
+.btn-sm.danger:hover{background:rgba(239,68,68,0.08)}
+
+/* PARTICIPANTS LIST */
+.participants-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.search-input{width:100%;padding:10px 14px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;margin-bottom:12px}
+.search-input::placeholder{color:var(--text3)}
+.participant-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.pi-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.pi-info{flex:1}
+.pi-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.pi-sub{font-size:11px;color:var(--text2)}
+.pi-status{font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px}
+.pi-done{background:rgba(34,197,94,0.1);color:var(--green)}
+.pi-prog{background:rgba(255,107,43,0.1);color:var(--orange)}
+.pi-new{background:rgba(99,102,241,0.1);color:#6366F1}
+
+/* PROGRESS BAR MINI */
+.mini-bar{height:3px;background:var(--bg3);border-radius:2px;margin-top:5px}
+.mini-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--orange),var(--yellow))}
+
+/* CREATE QUEST FORM */
+.form-group{margin-bottom:16px}
+.form-label{font-size:12px;font-weight:700;color:var(--text2);letter-spacing:0.5px;margin-bottom:6px;display:block;text-transform:uppercase}
+.form-input,.form-select,.form-textarea{width:100%;padding:11px 14px;background:var(--bg2);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--orange)}
+.form-select{cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239898B8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.form-textarea{resize:vertical;min-height:80px;line-height:1.5}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.quest-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.qt-option{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px;cursor:pointer;text-align:center;transition:all 0.2s}
+.qt-option:hover,.qt-option.selected{border-color:var(--orange);background:rgba(255,107,43,0.06)}
+.qt-option-icon{font-size:22px;margin-bottom:6px}
+.qt-option-label{font-size:12px;font-weight:600;color:var(--text2)}
+.qt-option.selected .qt-option-label{color:var(--orange)}
+
+.btn-full{width:100%;padding:13px;background:var(--orange);color:#fff;border:none;border-radius:11px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px}
+.btn-full:hover{background:var(--orange2);transform:translateY(-1px)}
+
+.success-toast{display:none;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.25);border-radius:10px;padding:12px 16px;color:var(--green);font-size:14px;font-weight:600;margin-bottom:16px;text-align:center}
+
+/* CHART PLACEHOLDER */
+.chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px}
+.chart-title{font-size:13px;font-weight:700;margin-bottom:14px;color:var(--text2)}
+.chart-bars{display:flex;align-items:flex-end;gap:6px;height:80px}
+.bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{border-radius:4px 4px 0 0;width:100%;background:linear-gradient(to top,var(--orange),var(--yellow));transition:height 0.5s var(--ease);min-height:4px}
+.bar-label{font-size:9px;color:var(--text3);font-weight:600}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Qw<span>e</span>stify</div>
+  <div class="nav-right">
+    <span class="admin-badge">ADMIN</span>
+    <button class="theme-toggle" id="themeToggle"></button>
+  </div>
+</nav>
+
+<!-- TABS -->
+<div class="admin-tabs">
+  <button class="atab active" onclick="showTab('stats',this)">Stats</button>
+  <button class="atab" onclick="showTab('campaigns',this)">Campagnes</button>
+  <button class="atab" onclick="showTab('participants',this)">Participants</button>
+  <button class="atab" onclick="showTab('create',this)">+ Créer quête</button>
+</div>
+
+<!-- ============ STATS ============ -->
+<div class="view active" id="view-stats">
+  <div class="sec-title">Vue d'ensemble</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="sc-label">Utilisateurs</div>
+      <div class="sc-num" style="color:var(--orange)">2 418</div>
+      <div class="sc-trend">+12% ce mois</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Quêtes complétées</div>
+      <div class="sc-num" style="color:var(--green)">8 740</div>
+      <div class="sc-trend">+8% ce mois</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Bons générés</div>
+      <div class="sc-num" style="color:var(--violet)">1 247</div>
+      <div class="sc-trend">+24% ce mois</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-label">Campagnes actives</div>
+      <div class="sc-num" style="color:var(--yellow)">7</div>
+      <div class="sc-trend">2 en attente</div>
+    </div>
+  </div>
+
+  <!-- CHART -->
+  <div class="chart-wrap">
+    <div class="chart-title">Quêtes complétées — 7 derniers jours</div>
+    <div class="chart-bars" id="chartBars"></div>
+  </div>
+
+  <!-- TOP CAMPAIGNS -->
+  <div class="sec-title" style="margin-bottom:12px">Top campagnes</div>
+  <div class="participant-item">
+    <div class="pi-avatar" style="background:linear-gradient(135deg,#000,#333);font-size:10px">Uber</div>
+    <div class="pi-info">
+      <div class="pi-name">Uber Genève</div>
+      <div class="pi-sub">1 247 participants · 312 bons utilisés</div>
+      <div class="mini-bar"><div class="mini-fill" style="width:85%"></div></div>
+    </div>
+    <span class="pi-status pi-done">85%</span>
+  </div>
+  <div class="participant-item">
+    <div class="pi-avatar" style="background:linear-gradient(135deg,#EA580C,#C2410C)">M</div>
+    <div class="pi-info">
+      <div class="pi-name">Migros Genève</div>
+      <div class="pi-sub">534 participants · 89 bons utilisés</div>
+      <div class="mini-bar"><div class="mini-fill" style="width:62%"></div></div>
+    </div>
+    <span class="pi-status pi-prog">62%</span>
+  </div>
+  <div class="participant-item">
+    <div class="pi-avatar" style="background:linear-gradient(135deg,#4C1D95,#6D28D9)">S</div>
+    <div class="pi-info">
+      <div class="pi-name">Café Shiroshi</div>
+      <div class="pi-sub">67 participants · 24 bons utilisés</div>
+      <div class="mini-bar"><div class="mini-fill" style="width:38%"></div></div>
+    </div>
+    <span class="pi-status pi-prog">38%</span>
+  </div>
+</div>
+
+<!-- ============ CAMPAIGNS ============ -->
+<div class="view" id="view-campaigns">
+  <div class="sec-title">Campagnes</div>
+  <div class="sec-sub">Active/désactive une campagne en un clic.</div>
+
+  <!-- Uber -->
+  <div class="campaign-card">
+    <div class="cc-header">
+      <div class="cc-logo" style="background:linear-gradient(135deg,#000,#333);color:#fff;font-size:10px;font-weight:800">Uber</div>
+      <div class="cc-info">
+        <div class="cc-name">Uber Genève</div>
+        <div class="cc-meta">Sponsorisé · Expire 25 juin 2025</div>
+      </div>
+      <label class="cc-toggle"><input type="checkbox" checked onchange="toggleCampaign(this,'uber')"><span class="cc-slider"></span></label>
+    </div>
+    <div class="cc-stats">
+      <div class="css-item"><div class="css-num" style="color:var(--orange)">1 247</div><div class="css-label">Participants</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--green)">312</div><div class="css-label">Bons utilisés</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--yellow)">5</div><div class="css-label">Quêtes</div></div>
+    </div>
+    <div class="cc-actions">
+      <button class="btn-sm" onclick="showTab('participants',document.querySelectorAll('.atab')[2])">Voir participants</button>
+      <button class="btn-sm" onclick="showTab('create',document.querySelectorAll('.atab')[3])">Modifier</button>
+      <button class="btn-sm danger">Supprimer</button>
+    </div>
+  </div>
+
+  <!-- Migros -->
+  <div class="campaign-card">
+    <div class="cc-header">
+      <div class="cc-logo" style="background:linear-gradient(135deg,#EA580C,#C2410C);font-size:20px">🛒</div>
+      <div class="cc-info">
+        <div class="cc-name">Migros Genève</div>
+        <div class="cc-meta">Local · Expire 30 juin 2025</div>
+      </div>
+      <label class="cc-toggle"><input type="checkbox" checked onchange="toggleCampaign(this,'migros')"><span class="cc-slider"></span></label>
+    </div>
+    <div class="cc-stats">
+      <div class="css-item"><div class="css-num" style="color:var(--orange)">534</div><div class="css-label">Participants</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--green)">89</div><div class="css-label">Bons utilisés</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--yellow)">4</div><div class="css-label">Quêtes</div></div>
+    </div>
+    <div class="cc-actions">
+      <button class="btn-sm">Voir participants</button>
+      <button class="btn-sm">Modifier</button>
+      <button class="btn-sm danger">Supprimer</button>
+    </div>
+  </div>
+
+  <!-- Dr Hybride -->
+  <div class="campaign-card">
+    <div class="cc-header">
+      <div class="cc-logo" style="background:linear-gradient(135deg,#065F46,#0D9488);font-size:10px;font-weight:800;color:#fff;text-align:center;line-height:1.2">Dr.<br>Hybride</div>
+      <div class="cc-info">
+        <div class="cc-name">Docteur Hybride</div>
+        <div class="cc-meta">Local · Expire 15 juil 2025</div>
+      </div>
+      <label class="cc-toggle"><input type="checkbox" checked onchange="toggleCampaign(this,'hybride')"><span class="cc-slider"></span></label>
+    </div>
+    <div class="cc-stats">
+      <div class="css-item"><div class="css-num" style="color:var(--orange)">89</div><div class="css-label">Participants</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--green)">12</div><div class="css-label">Bons utilisés</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--yellow)">3</div><div class="css-label">Quêtes</div></div>
+    </div>
+    <div class="cc-actions">
+      <button class="btn-sm">Voir participants</button>
+      <button class="btn-sm">Modifier</button>
+      <button class="btn-sm danger">Supprimer</button>
+    </div>
+  </div>
+
+  <!-- DriveGVA -->
+  <div class="campaign-card">
+    <div class="cc-header">
+      <div class="cc-logo" style="background:linear-gradient(135deg,#1E3A5F,#2563EB);font-size:9px;font-weight:800;color:#fff;text-align:center">Drive GVA</div>
+      <div class="cc-info">
+        <div class="cc-name">DriveGVA</div>
+        <div class="cc-meta">Local · En attente d'activation</div>
+      </div>
+      <label class="cc-toggle"><input type="checkbox" onchange="toggleCampaign(this,'drive')"><span class="cc-slider"></span></label>
+    </div>
+    <div class="cc-stats">
+      <div class="css-item"><div class="css-num" style="color:var(--text3)">0</div><div class="css-label">Participants</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--text3)">0</div><div class="css-label">Bons utilisés</div></div>
+      <div class="css-item"><div class="css-num" style="color:var(--yellow)">4</div><div class="css-label">Quêtes</div></div>
+    </div>
+    <div class="cc-actions">
+      <button class="btn-sm primary" onclick="activateCampaign(this)">Activer la campagne</button>
+      <button class="btn-sm">Modifier</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PARTICIPANTS ============ -->
+<div class="view" id="view-participants">
+  <div class="sec-title">Participants</div>
+  <input class="search-input" placeholder="Rechercher un participant..." oninput="filterPart(this.value)">
+
+  <div id="partList">
+    <div class="participant-item">
+      <div class="pi-avatar" style="background:linear-gradient(135deg,var(--orange),var(--violet))">J</div>
+      <div class="pi-info">
+        <div class="pi-name">Jordan M.</div>
+        <div class="pi-sub">Uber · 2/5 quêtes · Il y a 2h</div>
+        <div class="mini-bar"><div class="mini-fill" style="width:40%"></div></div>
+      </div>
+      <span class="pi-status pi-prog">40%</span>
+    </div>
+    <div class="participant-item">
+      <div class="pi-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">S</div>
+      <div class="pi-info">
+        <div class="pi-name">Sophie M.</div>
+        <div class="pi-sub">Uber · 5/5 quêtes · Il y a 1j</div>
+        <div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div>
+      </div>
+      <span class="pi-status pi-done">✓ Bon généré</span>
+    </div>
+    <div class="participant-item">
+      <div class="pi-avatar" style="background:linear-gradient(135deg,#22C55E,#16A34A)">A</div>
+      <div class="pi-info">
+        <div class="pi-name">Alex K.</div>
+        <div class="pi-sub">Migros · 5/5 quêtes · Il y a 3j</div>
+        <div class="mini-bar"><div class="mini-fill" style="width:100%"></div></div>
+      </div>
+      <span class="pi-status pi-done">✓ Bon généré</span>
+    </div>
+    <div class="participant-item">
+      <div class="pi-avatar" style="background:linear-gradient(135deg,#6366F1,#8B5CF6)">L</div>
+      <div class="pi-info">
+        <div class="pi-name">Léa B.</div>
+        <div class="pi-sub">Uber · 1/5 quêtes · Il y a 5h</div>
+        <div class="mini-bar"><div class="mini-fill" style="width:20%"></div></div>
+      </div>
+      <span class="pi-status pi-prog">20%</span>
+    </div>
+    <div class="participant-item">
+      <div class="pi-avatar" style="background:linear-gradient(135deg,#EC4899,#F43F5E)">M</div>
+      <div class="pi-info">
+        <div class="pi-name">Marco B.</div>
+        <div class="pi-sub">Dr. Hybride · inscrit · Aujourd'hui</div>
+      </div>
+      <span class="pi-status pi-new">Nouveau</span>
+    </div>
+    <div class="participant-item">
+      <div class="pi-avatar" style="background:linear-gradient(135deg,#0891B2,#0E7490)">N</div>
+      <div class="pi-info">
+        <div class="pi-name">Nina R.</div>
+        <div class="pi-sub">Migros · 3/4 quêtes · Il y a 2j</div>
+        <div class="mini-bar"><div class="mini-fill" style="width:75%"></div></div>
+      </div>
+      <span class="pi-status pi-prog">75%</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CREATE QUEST ============ -->
+<div class="view" id="view-create">
+  <div class="sec-title">Créer une quête</div>
+
+  <div id="successToast" class="success-toast">✓ Quête créée avec succès !</div>
+
+  <div class="form-group">
+    <label class="form-label">Partenaire / Campagne</label>
+    <select class="form-select">
+      <option>Uber Genève</option>
+      <option>Migros Genève</option>
+      <option>Café Shiroshi</option>
+      <option>Café Volta</option>
+      <option>Kebab Baba</option>
+      <option>Docteur Hybride</option>
+      <option>DriveGVA</option>
+      <option>+ Nouvelle campagne</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Titre de la quête</label>
+    <input class="form-input" type="text" placeholder="ex: Découvre l'histoire d'Uber" id="questTitle">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Type de quête</label>
+    <div class="quest-type-grid" id="qtGrid">
+      <div class="qt-option selected" onclick="selectType(this,'quiz')">
+        <div class="qt-option-icon">📖</div>
+        <div class="qt-option-label">Quiz</div>
+      </div>
+      <div class="qt-option" onclick="selectType(this,'instagram')">
+        <div class="qt-option-icon">❤️</div>
+        <div class="qt-option-label">Instagram</div>
+      </div>
+      <div class="qt-option" onclick="selectType(this,'video')">
+        <div class="qt-option-icon">🎬</div>
+        <div class="qt-option-label">Vidéo</div>
+      </div>
+      <div class="qt-option" onclick="selectType(this,'signup')">
+        <div class="qt-option-icon">👤</div>
+        <div class="qt-option-label">Inscription</div>
+      </div>
+      <div class="qt-option" onclick="selectType(this,'qr')">
+        <div class="qt-option-icon">📍</div>
+        <div class="qt-option-label">QR Code</div>
+      </div>
+      <div class="qt-option" onclick="selectType(this,'physical')">
+        <div class="qt-option-icon">🏪</div>
+        <div class="qt-option-label">Physique</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Texte explicatif (affiché avant les questions)</label>
+    <textarea class="form-textarea" placeholder="Écris ici le texte que l'utilisateur devra lire avant de répondre aux questions..."></textarea>
+  </div>
+
+  <div class="form-group" id="questionsBlock">
+    <label class="form-label">Questions (Quiz)</label>
+    <div id="questionsList">
+      <div class="form-group" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+        <input class="form-input" type="text" placeholder="Question 1" style="margin-bottom:8px">
+        <input class="form-input" type="text" placeholder="Réponse correcte" style="margin-bottom:6px;border-color:rgba(34,197,94,0.3)">
+        <input class="form-input" type="text" placeholder="Réponse fausse 1" style="margin-bottom:6px">
+        <input class="form-input" type="text" placeholder="Réponse fausse 2" style="margin-bottom:6px">
+        <input class="form-input" type="text" placeholder="Réponse fausse 3">
+      </div>
+    </div>
+    <button class="btn-sm" onclick="addQuestion()" style="width:100%;margin-top:4px">+ Ajouter une question</button>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group">
+      <label class="form-label">Récompense</label>
+      <input class="form-input" type="text" placeholder="ex: 20 CHF / 1 café">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Durée (jours)</label>
+      <input class="form-input" type="number" placeholder="30" min="1">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">URL du lien (Instagram, YouTube, Affiliation...)</label>
+    <input class="form-input" type="url" placeholder="https://...">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Statut</label>
+    <select class="form-select">
+      <option>Actif — visible immédiatement</option>
+      <option>Brouillon — non visible</option>
+      <option>Planifié</option>
+    </select>
+  </div>
+
+  <button class="btn-full" onclick="createQuest()">Créer la quête</button>
+</div>
+
+<script>
+// THEME
+const html=document.documentElement;
+const saved=localStorage.getItem('qst-theme')||'dark';
+html.setAttribute('data-theme',saved);
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+
+function showTab(name,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  el.classList.add('active');
+}
+
+function toggleCampaign(cb,name){
+  // visual only for now
+}
+
+function activateCampaign(btn){
+  const card=btn.closest('.campaign-card');
+  const toggle=card.querySelector('input[type=checkbox]');
+  toggle.checked=true;
+  btn.textContent='✓ Activée';
+  btn.style.background='var(--green)';
+  btn.style.borderColor='var(--green)';
+  btn.disabled=true;
+}
+
+function selectType(el,type){
+  document.querySelectorAll('.qt-option').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  const qb=document.getElementById('questionsBlock');
+  qb.style.display=(type==='quiz'||type==='video')?'block':'none';
+}
+
+function addQuestion(){
+  const ql=document.getElementById('questionsList');
+  const n=ql.querySelectorAll('.form-group').length+1;
+  const div=document.createElement('div');
+  div.className='form-group';
+  div.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px';
+  div.innerHTML=`
+    <input class="form-input" type="text" placeholder="Question ${n}" style="margin-bottom:8px">
+    <input class="form-input" type="text" placeholder="Réponse correcte" style="margin-bottom:6px;border-color:rgba(34,197,94,0.3)">
+    <input class="form-input" type="text" placeholder="Réponse fausse 1" style="margin-bottom:6px">
+    <input class="form-input" type="text" placeholder="Réponse fausse 2" style="margin-bottom:6px">
+    <input class="form-input" type="text" placeholder="Réponse fausse 3">
+  `;
+  ql.appendChild(div);
+}
+
+function createQuest(){
+  const title=document.getElementById('questTitle').value;
+  if(!title.trim()){document.getElementById('questTitle').focus();return;}
+  const toast=document.getElementById('successToast');
+  toast.style.display='block';
+  setTimeout(()=>toast.style.display='none',3000);
+  // Reset form
+  document.getElementById('questTitle').value='';
+}
+
+function filterPart(val){
+  const items=document.querySelectorAll('#partList .participant-item');
+  items.forEach(item=>{
+    const name=item.querySelector('.pi-name').textContent.toLowerCase();
+    item.style.display=name.includes(val.toLowerCase())?'flex':'none';
+  });
+}
+
+// Build chart
+const days=['L','M','Me','J','V','S','D'];
+const vals=[42,67,38,89,54,71,63];
+const max=Math.max(...vals);
+const cb=document.getElementById('chartBars');
+if(cb){
+  days.forEach((d,i)=>{
+    const w=document.createElement('div');
+    w.className='bar-wrap';
+    const pct=Math.round((vals[i]/max)*100);
+    w.innerHTML=`<div class="bar" style="height:${pct}%"></div><div class="bar-label">${d}</div>`;
+    cb.appendChild(w);
+  });
+}
+</script>
+</body>
+</html>

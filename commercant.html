@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Uber Genève</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--orange2:#FF8C55;--violet:#7C3AED;--green:#22C55E;--yellow:#F59E0B;--red:#EF4444}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#fff;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:90px}
+
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(14,14,20,0);border-bottom:1px solid transparent;position:fixed;top:0;left:0;right:0;z-index:100;transition:all 0.3s}
+nav.scrolled{background:var(--bg);border-bottom-color:var(--border)}
+.nav-back{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);border:none;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;padding:7px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.1)}
+.nav-back svg{width:16px;height:16px}
+.nav-right-btns{display:flex;gap:8px}
+.icon-nav-btn{width:36px;height:36px;background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-nav-btn svg{width:17px;height:17px;stroke:var(--text)}
+
+/* HERO BANNER */
+.merchant-banner{height:260px;background:linear-gradient(160deg,#000,#111,#1a1a1a);position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.banner-bg-text{position:absolute;font-size:130px;font-weight:900;color:rgba(255,255,255,0.04);top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;letter-spacing:-4px}
+.banner-gradient{position:absolute;inset:0;background:linear-gradient(to top,var(--bg) 0%,transparent 50%)}
+.banner-content{position:relative;z-index:1;padding:20px 16px;width:100%}
+.b-category{font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.b-name{font-size:26px;font-weight:900;letter-spacing:-0.5px;color:#fff;margin-bottom:6px}
+.b-tags{display:flex;gap:6px;flex-wrap:wrap}
+.b-tag{font-size:11px;font-weight:600;padding:3px 8px;border-radius:5px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7)}
+
+/* REWARD STRIP */
+.reward-strip{background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.05));border-top:1px solid rgba(34,197,94,0.15);border-bottom:1px solid rgba(34,197,94,0.15);padding:14px 16px;display:flex;align-items:center;gap:12px}
+.rs-icon{width:38px;height:38px;border-radius:10px;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rs-val{font-size:18px;font-weight:900;color:var(--green)}
+.rs-desc{font-size:12px;color:var(--text2);margin-top:1px}
+.rs-participants{margin-left:auto;text-align:right;flex-shrink:0}
+.rs-pnum{font-size:16px;font-weight:900;color:var(--text)}
+.rs-plabel{font-size:10px;color:var(--text3);font-weight:600}
+
+/* PROGRESS */
+.prog-section{padding:14px 16px;background:var(--bg2);border-bottom:1px solid var(--border)}
+.prog-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:7px}
+.prog-bar{height:6px;background:var(--bg3);border-radius:3px}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--orange),var(--yellow));width:40%}
+
+/* CONTENT SECTIONS */
+.content{padding:0 16px}
+
+/* SPECIAL EVENT BANNER */
+.event-banner{background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(99,102,241,0.08));border:1px solid rgba(124,58,237,0.2);border-radius:14px;padding:16px;margin:16px 0;display:flex;gap:14px;align-items:center}
+.ev-icon{font-size:32px;flex-shrink:0}
+.ev-info h4{font-size:14px;font-weight:800;margin-bottom:4px}
+.ev-info p{font-size:12px;color:var(--text2);line-height:1.5}
+.ev-badge{background:var(--violet);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:5px;margin-top:6px;display:inline-block}
+
+/* ABOUT */
+.about-section{padding:16px 0}
+.sec-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.about-text{font-size:14px;color:var(--text2);line-height:1.7}
+.about-links{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.about-link{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--border2);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;transition:all 0.2s}
+.about-link:hover{border-color:var(--border2);color:var(--text)}
+.about-link svg{width:14px;height:14px}
+
+/* QUESTS */
+.quests-section{padding:16px 0}
+.quest-row{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:13px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;transition:all 0.2s}
+.quest-row:hover{border-color:var(--border2);transform:translateX(3px)}
+.quest-row.done{border-color:rgba(34,197,94,0.2);background:rgba(34,197,94,0.03)}
+.quest-row.locked{opacity:0.45;cursor:not-allowed}
+.qr-num{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.qn-orange{background:rgba(255,107,43,0.12);color:var(--orange)}
+.qn-blue{background:rgba(99,102,241,0.12);color:#6366F1}
+.qn-purple{background:rgba(124,58,237,0.12);color:var(--violet)}
+.qn-yellow{background:rgba(245,158,11,0.12);color:var(--yellow)}
+.qn-done{background:rgba(34,197,94,0.12);color:var(--green)}
+.qr-info{flex:1}
+.qr-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.qr-desc{font-size:12px;color:var(--text2)}
+.qr-status{font-size:18px;flex-shrink:0}
+
+/* BOTTOM CTA */
+.bottom-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--border);z-index:10}
+.btn-start{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-start:hover{background:var(--orange2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,107,43,0.35)}
+</style>
+</head>
+<body>
+
+<nav id="mainNav">
+  <button class="nav-back" onclick="history.back()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour
+  </button>
+  <div class="nav-right-btns">
+    <div class="icon-nav-btn" title="Partager">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    </div>
+    <div class="icon-nav-btn" title="Favori" onclick="this.innerHTML='<svg viewBox=\'0 0 24 24\' fill=\'%23F59E0B\' stroke=\'%23F59E0B\' stroke-width=\'2\'><polygon points=\'12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\'/></svg>'">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="merchant-banner">
+  <div class="banner-bg-text">Uber</div>
+  <div class="banner-gradient"></div>
+  <div class="banner-content">
+    <div class="b-category">Uber Genève · Sponsorisé</div>
+    <div class="b-name">Première course offerte</div>
+    <div class="b-tags">
+      <span class="b-tag">Transport</span>
+      <span class="b-tag">5 quêtes</span>
+      <span class="b-tag">30 jours restants</span>
+    </div>
+  </div>
+</div>
+
+<!-- REWARD -->
+<div class="reward-strip">
+  <div class="rs-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z"/></svg></div>
+  <div><div class="rs-val">20 CHF offerts</div><div class="rs-desc">Valable sur ta prochaine course à Genève</div></div>
+  <div class="rs-participants"><div class="rs-pnum">1 247</div><div class="rs-plabel">Participants</div></div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-section">
+  <div class="prog-top"><span style="color:var(--text2);font-size:12px">Ta progression — 2/5 quêtes</span><span style="color:var(--orange);font-size:12px">40%</span></div>
+  <div class="prog-bar"><div class="prog-fill"></div></div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+  <!-- SPECIAL EVENT -->
+  <div class="event-banner">
+    <div class="ev-icon">🎪</div>
+    <div class="ev-info">
+      <h4>Quête spéciale — Vernissage</h4>
+      <p>Uber participe au festival Nuits Sonores à Genève. Scanne le code QR sur place pour débloquer une récompense exclusive.</p>
+      <span class="ev-badge">Événement limité · 14 juin</span>
+    </div>
+  </div>
+
+  <!-- QUESTS -->
+  <div class="quests-section">
+    <div class="sec-label">Quêtes</div>
+
+    <div class="quest-row done">
+      <div class="qr-num qn-done">✓</div>
+      <div class="qr-info"><div class="qr-name">Quête 1 — Découvre Uber</div><div class="qr-desc">Quiz complété</div></div>
+      <div class="qr-status">✅</div>
+    </div>
+    <div class="quest-row done">
+      <div class="qr-num qn-done">✓</div>
+      <div class="qr-info"><div class="qr-name">Quête 2 — Like Instagram</div><div class="qr-desc">Like effectué</div></div>
+      <div class="qr-status">✅</div>
+    </div>
+    <div class="quest-row" onclick="window.location='quest.html'">
+      <div class="qr-num qn-purple">👤</div>
+      <div class="qr-info"><div class="qr-name">Quête 3 — Like le 2ème post</div><div class="qr-desc">Like la campagne Uber Eats</div></div>
+      <div class="qr-status">▶</div>
+    </div>
+    <div class="quest-row locked">
+      <div class="qr-num qn-yellow">🎬</div>
+      <div class="qr-info"><div class="qr-name">Quête 4 — Crée un compte</div><div class="qr-desc">Inscris-toi via notre lien</div></div>
+      <div class="qr-status">🔒</div>
+    </div>
+    <div class="quest-row locked">
+      <div class="qr-num qn-blue">🎬</div>
+      <div class="qr-info"><div class="qr-name">Quête 5 — Regarde la vidéo</div><div class="qr-desc">Visionne et réponds aux questions</div></div>
+      <div class="qr-status">🔒</div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about-section">
+    <div class="sec-label">À propos d'Uber</div>
+    <div class="about-text">Fondée en 2009 à San Francisco, Uber est la plateforme de mobilité leader mondiale présente dans plus de 70 pays. À Genève depuis 2014, Uber propose des courses en voiture, du covoiturage et la livraison de repas avec Uber Eats.</div>
+    <div class="about-links">
+      <div class="about-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>uber.com</div>
+      <div class="about-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>Instagram</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-cta">
+  <button class="btn-start" onclick="window.location='quest.html'">Continuer les quêtes →</button>
+</div>
+
+<script>
+const html=document.documentElement;
+html.setAttribute('data-theme',localStorage.getItem('qst-theme')||'dark');
+window.addEventListener('scroll',()=>{
+  document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>180);
+});
+</script>
+</body>
+</html>

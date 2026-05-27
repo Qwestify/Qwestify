@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — CGU & Confidentialité</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--violet:#7C3AED;--green:#22C55E}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#fff;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:40px}
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-back{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.nav-back svg{width:18px;height:18px}
+.theme-toggle{width:44px;height:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;cursor:pointer;position:relative}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px);background:var(--orange)}
+
+/* TABS */
+.doc-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:56px;z-index:50}
+.dtab{flex:1;padding:13px;text-align:center;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;border-bottom:2px solid transparent;transition:all 0.2s}
+.dtab.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+.doc-view{display:none;padding:20px 16px}
+.doc-view.active{display:block}
+
+/* CONTENT */
+.doc-hero{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:24px;text-align:center}
+.doc-hero h1{font-size:20px;font-weight:900;letter-spacing:-0.3px;margin-bottom:6px}
+.doc-hero p{font-size:13px;color:var(--text2);line-height:1.5}
+.doc-date{display:inline-block;background:rgba(255,107,43,0.1);color:var(--orange);font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;margin-top:8px}
+
+.doc-section{margin-bottom:28px}
+.doc-h2{font-size:16px;font-weight:800;letter-spacing:-0.2px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.doc-h2::before{content:'';width:3px;height:18px;background:var(--orange);border-radius:2px;flex-shrink:0}
+.doc-p{font-size:14px;color:var(--text2);line-height:1.75;margin-bottom:8px}
+.doc-p strong{color:var(--text);font-weight:700}
+.doc-list{list-style:none;padding:0;margin:8px 0}
+.doc-list li{font-size:14px;color:var(--text2);line-height:1.6;padding:4px 0 4px 16px;position:relative}
+.doc-list li::before{content:'—';position:absolute;left:0;color:var(--text3)}
+.doc-h3{font-size:14px;font-weight:700;margin-bottom:6px;margin-top:14px;color:var(--text)}
+.doc-divider{height:1px;background:var(--border);margin:20px 0}
+.contact-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:12px}
+.cc-row{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--text2);padding:5px 0}
+.cc-row svg{width:16px;height:16px;flex-shrink:0;color:var(--orange)}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-back" onclick="history.back()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour
+  </button>
+  <button class="theme-toggle" id="themeToggle"></button>
+</nav>
+
+<div class="doc-tabs">
+  <button class="dtab active" onclick="showDoc('cgu',this)">CGU</button>
+  <button class="dtab" onclick="showDoc('privacy',this)">Confidentialité</button>
+  <button class="dtab" onclick="showDoc('cookies',this)">Cookies</button>
+</div>
+
+<!-- CGU -->
+<div class="doc-view active" id="doc-cgu">
+  <div class="doc-hero">
+    <h1>Conditions Générales d'Utilisation</h1>
+    <p>Veuillez lire attentivement ces conditions avant d'utiliser Qwestify.</p>
+    <span class="doc-date">Dernière mise à jour : 26 mai 2025</span>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">1. Présentation de Qwestify</div>
+    <div class="doc-p">Qwestify est une plateforme de fidélisation gamifiée éditée par <strong>Qwestify Sàrl</strong>, société de droit suisse. La plateforme permet aux utilisateurs de compléter des quêtes proposées par des partenaires commerciaux et d'obtenir en échange des récompenses (bons de réduction, offres exclusives).</div>
+    <div class="doc-p">L'accès et l'utilisation de la plateforme impliquent l'acceptation pleine et entière des présentes CGU.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">2. Inscription et compte utilisateur</div>
+    <div class="doc-p">Pour accéder aux services, l'utilisateur doit créer un compte en fournissant une adresse email valide et un mot de passe. L'utilisateur s'engage à :</div>
+    <ul class="doc-list">
+      <li>Fournir des informations exactes et à jour</li>
+      <li>Maintenir la confidentialité de ses identifiants</li>
+      <li>Être âgé d'au moins <strong>16 ans</strong></li>
+      <li>Ne pas créer plusieurs comptes</li>
+      <li>Notifier immédiatement Qwestify de toute utilisation non autorisée</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">3. Utilisation des quêtes et récompenses</div>
+    <div class="doc-h3">Bons de réduction</div>
+    <div class="doc-p">Les bons générés sont <strong>nominatifs et non transférables</strong>. Chaque bon dispose d'une date d'expiration indiquée sur le coupon. Les bons ne peuvent pas être échangés contre de l'argent.</div>
+    <div class="doc-h3">Interdictions</div>
+    <ul class="doc-list">
+      <li>Toute tentative de fraude ou de manipulation du système de quêtes</li>
+      <li>L'utilisation de scripts ou robots automatisés</li>
+      <li>La revente ou le transfert de bons à des tiers</li>
+      <li>La création de faux comptes pour multiplier les récompenses</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">4. Responsabilité</div>
+    <div class="doc-p">Qwestify agit en tant qu'intermédiaire entre les utilisateurs et les partenaires commerciaux. <strong>Qwestify n'est pas responsable</strong> de la qualité des produits ou services offerts par les partenaires, ni de l'indisponibilité temporaire de la plateforme.</div>
+    <div class="doc-p">Les partenaires commerciaux sont seuls responsables de l'exécution des récompenses proposées.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">5. Propriété intellectuelle</div>
+    <div class="doc-p">L'ensemble des éléments de la plateforme (logo, design, contenus, code) est la propriété exclusive de <strong>Qwestify Sàrl</strong> et est protégé par le droit suisse de la propriété intellectuelle. Toute reproduction non autorisée est interdite.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">6. Modification et résiliation</div>
+    <div class="doc-p">Qwestify se réserve le droit de modifier les présentes CGU à tout moment. Les utilisateurs seront notifiés par email de toute modification substantielle. La poursuite de l'utilisation de la plateforme vaut acceptation des nouvelles conditions.</div>
+    <div class="doc-p">Qwestify peut suspendre ou supprimer tout compte en cas de violation des présentes CGU.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">7. Droit applicable</div>
+    <div class="doc-p">Les présentes CGU sont soumises au <strong>droit suisse</strong>. Tout litige sera soumis à la juridiction compétente de <strong>Genève, Suisse</strong>.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">Contact</div>
+    <div class="contact-card">
+      <div class="cc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>Qwestify Sàrl, Genève, Suisse</div>
+      <div class="cc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>legal@qwestify.ch</div>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVACY -->
+<div class="doc-view" id="doc-privacy">
+  <div class="doc-hero">
+    <h1>Politique de Confidentialité</h1>
+    <p>Comment nous collectons, utilisons et protégeons vos données personnelles.</p>
+    <span class="doc-date">Conforme à la LPD suisse — 26 mai 2025</span>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">1. Responsable du traitement</div>
+    <div class="doc-p"><strong>Qwestify Sàrl</strong>, Genève, Suisse est responsable du traitement de vos données conformément à la <strong>Loi fédérale suisse sur la protection des données (LPD)</strong>.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">2. Données collectées</div>
+    <div class="doc-h3">Données fournies par l'utilisateur</div>
+    <ul class="doc-list">
+      <li>Adresse email et prénom lors de l'inscription</li>
+      <li>Données de progression des quêtes</li>
+      <li>Historique des bons gagnés et utilisés</li>
+    </ul>
+    <div class="doc-h3">Données collectées automatiquement</div>
+    <ul class="doc-list">
+      <li>Données de connexion (adresse IP, type d'appareil)</li>
+      <li>Pages visitées et durée des sessions</li>
+      <li>Données de performance de la plateforme</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">3. Finalités du traitement</div>
+    <ul class="doc-list">
+      <li>Gestion des comptes et authentification</li>
+      <li>Suivi de la progression des quêtes</li>
+      <li>Génération et gestion des bons de réduction</li>
+      <li>Communication relative aux campagnes actives</li>
+      <li>Amélioration de la plateforme (données anonymisées)</li>
+      <li>Prévention de la fraude</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">4. Partage des données</div>
+    <div class="doc-p">Qwestify ne vend jamais vos données personnelles. Les données peuvent être partagées avec :</div>
+    <ul class="doc-list">
+      <li><strong>Partenaires commerciaux</strong> : uniquement les données nécessaires à la validation des bons (identifiant anonyme)</li>
+      <li><strong>Prestataires techniques</strong> : hébergement (Supabase), déploiement (Vercel) — soumis à des engagements de confidentialité</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">5. Vos droits</div>
+    <div class="doc-p">Conformément à la LPD, vous disposez des droits suivants :</div>
+    <ul class="doc-list">
+      <li><strong>Droit d'accès</strong> : obtenir une copie de vos données</li>
+      <li><strong>Droit de rectification</strong> : corriger vos données inexactes</li>
+      <li><strong>Droit à l'effacement</strong> : supprimer votre compte et vos données</li>
+      <li><strong>Droit à la portabilité</strong> : exporter vos données</li>
+      <li><strong>Droit d'opposition</strong> : refuser certains traitements</li>
+    </ul>
+    <div class="doc-p" style="margin-top:10px">Pour exercer vos droits : <strong>privacy@qwestify.ch</strong></div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">6. Conservation des données</div>
+    <div class="doc-p">Les données sont conservées pendant la durée d'activité du compte + <strong>2 ans</strong> après sa suppression, conformément aux obligations légales suisses.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">7. Sécurité</div>
+    <div class="doc-p">Qwestify met en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données : chiffrement HTTPS, mots de passe hachés, accès restreint aux données.</div>
+  </div>
+</div>
+
+<!-- COOKIES -->
+<div class="doc-view" id="doc-cookies">
+  <div class="doc-hero">
+    <h1>Politique des Cookies</h1>
+    <p>Utilisation minimale des cookies, dans le respect de votre vie privée.</p>
+    <span class="doc-date">26 mai 2025</span>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">Cookies utilisés</div>
+    <div class="doc-h3">Cookies strictement nécessaires</div>
+    <div class="doc-p">Ces cookies sont indispensables au fonctionnement de la plateforme. Ils ne peuvent pas être désactivés.</div>
+    <ul class="doc-list">
+      <li><strong>qst-session</strong> : maintien de la session utilisateur</li>
+      <li><strong>qst-theme</strong> : mémorisation du thème clair/sombre</li>
+    </ul>
+    <div class="doc-h3">Cookies analytiques (optionnels)</div>
+    <div class="doc-p">Utilisés pour comprendre comment la plateforme est utilisée, de manière anonyme. Vous pouvez les refuser.</div>
+    <ul class="doc-list">
+      <li>Statistiques de navigation anonymisées</li>
+      <li>Performance des pages</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">Pas de cookies publicitaires</div>
+    <div class="doc-p">Qwestify <strong>n'utilise aucun cookie publicitaire</strong> ou de tracking tiers. Vos données de navigation ne sont pas partagées avec des régies publicitaires.</div>
+  </div>
+
+  <div class="doc-section">
+    <div class="doc-h2">Gestion de vos préférences</div>
+    <div class="doc-p">Vous pouvez gérer vos préférences de cookies dans les paramètres de votre navigateur ou depuis la section Paramètres de votre compte Qwestify.</div>
+  </div>
+</div>
+
+<script>
+const html=document.documentElement;
+html.setAttribute('data-theme',localStorage.getItem('qst-theme')||'dark');
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+function showDoc(name,el){
+  document.querySelectorAll('.dtab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.doc-view').forEach(v=>v.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('doc-'+name).classList.add('active');
+}
+</script>
+</body>
+</html>

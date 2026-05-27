@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Uber Quêtes</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--orange2:#FF8C55;--violet:#7C3AED;--green:#22C55E;--red:#EF4444;--yellow:#F59E0B}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#FFFFFF;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased}
+
+/* NAV */
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.nav-back{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.nav-back svg{width:18px;height:18px}
+.theme-toggle{width:48px;height:26px;background:var(--bg3);border:1px solid var(--border2);border-radius:13px;cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(22px);background:var(--orange)}
+
+/* HERO BANNER */
+.quest-hero{height:180px;background:linear-gradient(135deg,#000,#1c1c1c);position:relative;display:flex;align-items:flex-end;padding:20px}
+.quest-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(14,14,20,0.95) 0%,transparent 60%)}
+.hero-brand{font-size:52px;font-weight:900;color:rgba(255,255,255,0.08);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);letter-spacing:-2px}
+.hero-info{position:relative;z-index:1}
+.hero-category{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.hero-name{font-size:22px;font-weight:800;letter-spacing:-0.5px}
+
+/* REWARD BANNER */
+.reward-banner{margin:16px;background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(34,197,94,0.04));border:1px solid rgba(34,197,94,0.2);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px}
+.rb-icon{width:44px;height:44px;border-radius:10px;background:rgba(34,197,94,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rb-value{font-size:20px;font-weight:900;color:var(--green)}
+.rb-desc{font-size:12px;color:var(--text2);margin-top:2px}
+
+/* PROGRESS */
+.prog-wrap{margin:0 16px 16px;padding:14px 16px;background:var(--bg2);border:1px solid var(--border);border-radius:12px}
+.prog-top{display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:8px}
+.prog-label{color:var(--text2)}
+.prog-pct{color:var(--orange)}
+.prog-bar{height:6px;background:var(--bg3);border-radius:3px}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--orange),var(--yellow));transition:width 0.5s var(--ease)}
+
+/* QUESTS */
+.quests-section{padding:0 16px 100px}
+.qs-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+
+.quest-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;transition:all 0.25s var(--ease)}
+.quest-card.unlocked{cursor:pointer}
+.quest-card.unlocked:hover{border-color:var(--border2);transform:translateX(3px)}
+.quest-card.locked{opacity:0.45}
+.quest-card.done{border-color:rgba(34,197,94,0.25);background:rgba(34,197,94,0.03)}
+.quest-card.active-card{border-color:var(--orange);box-shadow:0 0 0 1px rgba(255,107,43,0.2)}
+
+.qc-header{display:flex;align-items:center;gap:14px;padding:14px 16px}
+.qc-num{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0}
+.qc-num.orange{background:rgba(255,107,43,0.12);color:var(--orange)}
+.qc-num.blue{background:rgba(99,102,241,0.12);color:#6366F1}
+.qc-num.purple{background:rgba(124,58,237,0.12);color:var(--violet)}
+.qc-num.yellow{background:rgba(245,158,11,0.12);color:var(--yellow)}
+.qc-num.green2{background:rgba(34,197,94,0.12);color:var(--green)}
+.qc-num.done-c{background:rgba(34,197,94,0.15);color:var(--green)}
+.qc-info{flex:1}
+.qc-name{font-size:14px;font-weight:700;margin-bottom:3px}
+.qc-desc{font-size:12px;color:var(--text2)}
+.qc-status{font-size:18px;flex-shrink:0}
+
+/* QUIZ PANEL */
+.quiz-panel{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.quiz-panel.open{display:block;animation:slideDown 0.3s var(--ease)}
+@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+
+.info-box{background:rgba(99,102,241,0.06);border:1px solid rgba(99,102,241,0.15);border-radius:10px;padding:14px;margin-bottom:16px}
+.info-box-label{font-size:10px;font-weight:700;letter-spacing:1.5px;color:#6366F1;text-transform:uppercase;margin-bottom:8px}
+.info-box p{font-size:13px;color:var(--text);line-height:1.65}
+.info-box strong{color:var(--text);font-weight:700}
+
+.quiz-q{font-size:15px;font-weight:700;margin-bottom:12px;line-height:1.4}
+.quiz-opt{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-bottom:8px;cursor:pointer;font-size:14px;font-weight:500;transition:all 0.2s;display:flex;align-items:center;gap:10px}
+.quiz-opt:hover{background:rgba(99,102,241,0.08);border-color:rgba(99,102,241,0.3)}
+.quiz-opt.selected{background:rgba(99,102,241,0.12);border-color:#6366F1;color:var(--text)}
+.quiz-opt.correct{background:rgba(34,197,94,0.1);border-color:var(--green);color:var(--green)}
+.quiz-opt.wrong{background:rgba(239,68,68,0.1);border-color:var(--red);color:var(--red)}
+.opt-letter{width:24px;height:24px;border-radius:6px;background:rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+
+.social-action{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.social-action p{font-size:13px;color:var(--text2);line-height:1.5}
+.btn-action{padding:12px;background:linear-gradient(135deg,#E1306C,#F77737);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-action:hover{opacity:0.9;transform:scale(1.02)}
+.btn-action.blue{background:linear-gradient(135deg,var(--violet),#6366F1)}
+.btn-validate{display:none;padding:12px;background:var(--green);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-validate:hover{opacity:0.9}
+
+.quiz-step-info{font-size:12px;color:var(--text3);text-align:right;margin-bottom:12px}
+
+/* BOTTOM CTA */
+.bottom-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--border);z-index:10}
+.btn-main{width:100%;padding:15px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;letter-spacing:0.2px}
+.btn-main:hover{background:var(--orange2);transform:translateY(-1px);box-shadow:0 8px 24px rgba(255,107,43,0.35)}
+.btn-main:disabled{background:var(--bg3);color:var(--text3);cursor:not-allowed;transform:none;box-shadow:none}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-back" onclick="history.back()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Retour
+  </button>
+  <button class="theme-toggle" id="themeToggle"></button>
+</nav>
+
+<!-- HERO -->
+<div class="quest-hero">
+  <div class="hero-brand">Uber</div>
+  <div class="hero-info">
+    <div class="hero-category">Uber Genève — Sponsorisé</div>
+    <div class="hero-name">Première course offerte</div>
+  </div>
+</div>
+
+<!-- REWARD -->
+<div class="reward-banner">
+  <div class="rb-icon">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M12 8V5a3 3 0 00-3-3v0a3 3 0 000 6h3z"/><path d="M12 8V5a3 3 0 013-3v0a3 3 0 010 6h-3z"/></svg>
+  </div>
+  <div>
+    <div class="rb-value">20 CHF offerts</div>
+    <div class="rb-desc">Valable sur ta prochaine course Uber à Genève</div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="prog-wrap">
+  <div class="prog-top">
+    <span class="prog-label">Progression — <span id="progText">0 / 5 quêtes</span></span>
+    <span class="prog-pct" id="progPct">0%</span>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+</div>
+
+<!-- QUESTS LIST -->
+<div class="quests-section">
+  <div class="qs-label">Quêtes à compléter</div>
+
+  <!-- Q1 — Quiz -->
+  <div class="quest-card unlocked active-card" id="card1">
+    <div class="qc-header" onclick="togglePanel(1)">
+      <div class="qc-num orange" id="num1">📖</div>
+      <div class="qc-info">
+        <div class="qc-name">Quête 1 — Découvre Uber</div>
+        <div class="qc-desc">Lis le texte et réponds aux 4 questions</div>
+      </div>
+      <div class="qc-status" id="st1">▶</div>
+    </div>
+    <div class="quiz-panel" id="panel1">
+      <!-- INFO TEXT -->
+      <div class="info-box">
+        <div class="info-box-label">📌 À retenir</div>
+        <p>Uber a été fondée en <strong>2009</strong> à San Francisco par Travis Kalanick et Garrett Camp. La société est arrivée à <strong>Genève en 2014</strong>. Uber est d'origine <strong>américaine</strong>. Aujourd'hui Uber opère dans plus de <strong>70 pays</strong> et propose aussi Uber Eats pour la livraison de repas.</p>
+      </div>
+      <div id="quizContainer1"></div>
+    </div>
+  </div>
+
+  <!-- Q2 — Instagram -->
+  <div class="quest-card locked" id="card2">
+    <div class="qc-header">
+      <div class="qc-num blue" id="num2">❤️</div>
+      <div class="qc-info">
+        <div class="qc-name">Quête 2 — Like Instagram</div>
+        <div class="qc-desc">Like le post officiel Uber Genève</div>
+      </div>
+      <div class="qc-status" id="st2">🔒</div>
+    </div>
+    <div class="quiz-panel" id="panel2">
+      <div class="social-action">
+        <p>Clique sur le bouton pour ouvrir le post Instagram Uber Genève, like-le puis reviens valider ta quête.</p>
+        <button class="btn-action" onclick="openSocial('panel2')">Ouvrir le post Instagram →</button>
+        <button class="btn-validate" id="val2" onclick="completeQuest(2)">✓ J'ai liké le post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 — Like 2 -->
+  <div class="quest-card locked" id="card3">
+    <div class="qc-header">
+      <div class="qc-num blue" id="num3">❤️</div>
+      <div class="qc-info">
+        <div class="qc-name">Quête 3 — Like le 2ème post</div>
+        <div class="qc-desc">Like la nouvelle campagne Uber Eats</div>
+      </div>
+      <div class="qc-status" id="st3">🔒</div>
+    </div>
+    <div class="quiz-panel" id="panel3">
+      <div class="social-action">
+        <p>Like le deuxième post de la campagne Uber Eats sur Instagram.</p>
+        <button class="btn-action" onclick="openSocial('panel3')">Ouvrir le post →</button>
+        <button class="btn-validate" id="val3" onclick="completeQuest(3)">✓ J'ai liké le post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 — Inscription -->
+  <div class="quest-card locked" id="card4">
+    <div class="qc-header">
+      <div class="qc-num purple" id="num4">👤</div>
+      <div class="qc-info">
+        <div class="qc-name">Quête 4 — Créer un compte Uber</div>
+        <div class="qc-desc">Inscris-toi via notre lien partenaire</div>
+      </div>
+      <div class="qc-status" id="st4">🔒</div>
+    </div>
+    <div class="quiz-panel" id="panel4">
+      <div class="social-action">
+        <p>En t'inscrivant via ce lien, tu soutiens Qwestify et obtiens un bonus de bienvenue exclusif sur Uber !</p>
+        <button class="btn-action blue" onclick="openSocial('panel4')">Créer mon compte Uber →</button>
+        <button class="btn-validate" id="val4" onclick="completeQuest(4)">✓ Mon compte est créé</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q5 — Vidéo -->
+  <div class="quest-card locked" id="card5">
+    <div class="qc-header">
+      <div class="qc-num yellow" id="num5">🎬</div>
+      <div class="qc-info">
+        <div class="qc-name">Quête 5 — Regarde la vidéo</div>
+        <div class="qc-desc">Visionne la vidéo et réponds aux questions</div>
+      </div>
+      <div class="qc-status" id="st5">🔒</div>
+    </div>
+    <div class="quiz-panel" id="panel5">
+      <div class="social-action" style="margin-bottom:14px">
+        <p>Regarde la vidéo de présentation Uber, puis réponds aux questions pour valider.</p>
+        <button class="btn-action blue" onclick="openVideo()">▶ Regarder la vidéo YouTube</button>
+        <button class="btn-validate" id="valVideo" onclick="showVideoQuiz()">✓ J'ai regardé la vidéo</button>
+      </div>
+      <div id="videoQuiz" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-cta">
+  <button class="btn-main" id="mainBtn" disabled>Commence par la Quête 1</button>
+</div>
+
+<script>
+// THEME
+const html=document.documentElement;
+const saved=localStorage.getItem('qst-theme')||'dark';
+html.setAttribute('data-theme',saved);
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+
+// QUIZ DATA
+const quizData=[
+  {q:"En quelle année Uber a-t-il été fondé ?",opts:["2005","2007","2009","2012"],correct:2},
+  {q:"Quand Uber est-il arrivé à Genève ?",opts:["2011","2013","2014","2016"],correct:2},
+  {q:"De quelle origine est la société Uber ?",opts:["Britannique","Américaine","Canadienne","Allemande"],correct:1},
+  {q:"Dans combien de pays Uber opère-t-il aujourd'hui ?",opts:["30+","50+","70+","100+"],correct:2},
+];
+
+const videoQuizData=[
+  {q:"Quel service Uber permet de commander à manger ?",opts:["Uber Go","Uber Eats","Uber Flash","Uber Rush"],correct:1},
+  {q:"Comment partager sa position en temps réel ?",opts:["Impossible","Via 'Partager ETA'","Via SMS","Via email"],correct:1},
+];
+
+let completed=new Set();
+let quizStep=0;
+let currentQuiz=[];
+let openPanel=null;
+
+function updateProgress(){
+  const n=completed.size;const total=5;
+  document.getElementById('progText').textContent=n+' / '+total+' quêtes';
+  document.getElementById('progPct').textContent=Math.round(n/total*100)+'%';
+  document.getElementById('progFill').style.width=(n/total*100)+'%';
+  const btn=document.getElementById('mainBtn');
+  if(n===total){btn.disabled=false;btn.textContent='Récupérer ma récompense →';btn.onclick=()=>window.location='result.html';}
+  else if(n>0){btn.disabled=true;btn.textContent=n+'/5 quêtes complétées';}
+}
+
+function togglePanel(num){
+  const panel=document.getElementById('panel'+num);
+  if(panel.classList.contains('open')){panel.classList.remove('open');return;}
+  // close others
+  [1,2,3,4,5].forEach(i=>{document.getElementById('panel'+i)?.classList.remove('open');});
+  panel.classList.add('open');
+  if(num===1&&!completed.has(1))renderQuiz();
+}
+
+function renderQuiz(step){
+  step=step||0;quizStep=step;
+  const c=document.getElementById('quizContainer1');
+  if(step===0){
+    // already showing info box, just show first question
+    step=1;quizStep=1;
+  }
+  const qd=quizData[quizStep-1];
+  if(!qd)return;
+  c.innerHTML=`
+    <div class="quiz-step-info">Question ${quizStep} / ${quizData.length}</div>
+    <div class="quiz-q">${qd.q}</div>
+    ${qd.opts.map((o,i)=>`<div class="quiz-opt" onclick="selectAnswer(this,${i},${qd.correct})"><span class="opt-letter">${String.fromCharCode(65+i)}</span>${o}</div>`).join('')}
+  `;
+}
+
+function selectAnswer(el,chosen,correct){
+  document.querySelectorAll('#quizContainer1 .quiz-opt').forEach(o=>o.onclick=null);
+  if(chosen===correct){
+    el.classList.add('correct');
+    setTimeout(()=>{
+      quizStep++;
+      if(quizStep>quizData.length){completeQuest(1);}
+      else{renderQuiz(quizStep);}
+    },700);
+  }else{
+    el.classList.add('wrong');
+    document.querySelectorAll('#quizContainer1 .quiz-opt')[correct].classList.add('correct');
+    setTimeout(()=>{
+      // restart quiz
+      document.getElementById('panel1').querySelector('.info-box').style.display='block';
+      renderQuiz(1);
+    },1200);
+  }
+}
+
+function completeQuest(num){
+  completed.add(num);
+  const card=document.getElementById('card'+num);
+  card.classList.remove('unlocked','active-card','locked');
+  card.classList.add('done');
+  document.getElementById('st'+num).textContent='✅';
+  document.getElementById('num'+num).className='qc-num done-c';
+  document.getElementById('num'+num).textContent='✓';
+  document.getElementById('panel'+num)?.classList.remove('open');
+  // unlock next
+  const next=num+1;
+  if(next<=5){
+    const nc=document.getElementById('card'+next);
+    if(nc){nc.classList.remove('locked');nc.classList.add('unlocked','active-card');document.getElementById('st'+next).textContent='▶';nc.querySelector('.qc-header').onclick=()=>togglePanel(next);}
+  }
+  updateProgress();
+}
+
+function openSocial(panelId){
+  const panel=document.getElementById(panelId);
+  const btn=panel.querySelector('.btn-validate');
+  if(btn)setTimeout(()=>{btn.style.display='block';},1500);
+}
+
+function openVideo(){
+  setTimeout(()=>{document.getElementById('valVideo').style.display='block';},2000);
+}
+
+function showVideoQuiz(){
+  document.getElementById('valVideo').style.display='none';
+  const c=document.getElementById('videoQuiz');
+  c.style.display='block';
+  let vStep=0;
+  function renderVQ(){
+    const qd=videoQuizData[vStep];
+    if(!qd){completeQuest(5);return;}
+    c.innerHTML=`
+      <div class="quiz-step-info">Question ${vStep+1} / ${videoQuizData.length}</div>
+      <div class="quiz-q">${qd.q}</div>
+      ${qd.opts.map((o,i)=>`<div class="quiz-opt" onclick="selectVA(this,${i},${qd.correct})"><span class="opt-letter">${String.fromCharCode(65+i)}</span>${o}</div>`).join('')}
+    `;
+  }
+  window.selectVA=function(el,chosen,correct){
+    c.querySelectorAll('.quiz-opt').forEach(o=>o.onclick=null);
+    if(chosen===correct){el.classList.add('correct');setTimeout(()=>{vStep++;renderVQ();},700);}
+    else{el.classList.add('wrong');c.querySelectorAll('.quiz-opt')[correct].classList.add('correct');setTimeout(()=>{vStep=0;renderVQ();},1200);}
+  };
+  renderVQ();
+}
+
+// Init
+renderQuiz(1);
+document.getElementById('card1').querySelector('.qc-header').onclick=()=>togglePanel(1);
+togglePanel(1);
+</script>
+</body>
+</html>

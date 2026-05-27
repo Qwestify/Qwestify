@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Classement</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--violet:#7C3AED;--green:#22C55E;--yellow:#F59E0B;--red:#EF4444}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#fff;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:80px}
+
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.nav-title{font-size:16px;font-weight:800;letter-spacing:-0.3px}
+.theme-toggle{width:44px;height:24px;background:var(--bg3);border:1px solid var(--border2);border-radius:12px;cursor:pointer;position:relative}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px);background:var(--orange)}
+
+/* PODIUM */
+.podium-section{padding:24px 16px 0;text-align:center;position:relative;overflow:hidden}
+.podium-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(245,158,11,0.08) 0%,transparent 70%);pointer-events:none}
+.podium-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:20px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:12px;margin-bottom:16px;position:relative;z-index:1}
+
+.podium-item{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;max-width:100px}
+.p-avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;position:relative}
+.p1 .p-avatar{width:68px;height:68px;font-size:22px;border:3px solid var(--yellow);box-shadow:0 0 20px rgba(245,158,11,0.3)}
+.p2 .p-avatar{width:54px;height:54px;font-size:18px;border:2px solid rgba(148,163,184,0.4)}
+.p3 .p-avatar{width:48px;height:48px;font-size:16px;border:2px solid rgba(180,83,9,0.4)}
+.p-crown{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-size:18px}
+.p-name{font-size:12px;font-weight:700;text-align:center}
+.p-pts{font-size:11px;color:var(--text2);font-weight:600}
+.podium-block{border-radius:10px 10px 0 0;width:100%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:rgba(255,255,255,0.5)}
+.pb1{background:linear-gradient(180deg,rgba(245,158,11,0.25),rgba(245,158,11,0.1));height:70px;color:var(--yellow)}
+.pb2{background:linear-gradient(180deg,rgba(148,163,184,0.15),rgba(148,163,184,0.05));height:50px;color:#94A3B8}
+.pb3{background:linear-gradient(180deg,rgba(180,83,9,0.15),rgba(180,83,9,0.05));height:36px;color:#B45309}
+
+/* MY POSITION */
+.my-pos{margin:0 16px 16px;background:linear-gradient(135deg,rgba(255,107,43,0.08),rgba(255,107,43,0.04));border:1px solid rgba(255,107,43,0.2);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px}
+.my-rank{width:36px;height:36px;border-radius:8px;background:rgba(255,107,43,0.15);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:var(--orange);flex-shrink:0}
+.my-info{flex:1}
+.my-name{font-size:14px;font-weight:700}
+.my-pts-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.my-pts{font-size:16px;font-weight:900;color:var(--orange)}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;background:var(--bg);position:sticky;top:56px;z-index:50}
+.filter-tabs::-webkit-scrollbar{display:none}
+.ftab{padding:12px 16px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border:none;background:none;font-family:'Inter',sans-serif;white-space:nowrap;border-bottom:2px solid transparent;transition:all 0.2s;flex-shrink:0}
+.ftab.active{color:var(--orange);border-bottom-color:var(--orange)}
+
+/* RANK LIST */
+.rank-section{padding:12px 16px}
+.rank-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;margin-bottom:6px;transition:background 0.2s}
+.rank-item:hover{background:var(--bg2)}
+.rank-item.me{background:rgba(255,107,43,0.05);border:1px solid rgba(255,107,43,0.15)}
+.ri-pos{width:28px;text-align:center;font-size:13px;font-weight:800;color:var(--text2);flex-shrink:0}
+.ri-pos.gold{color:var(--yellow)}
+.ri-pos.silver{color:#94A3B8}
+.ri-pos.bronze{color:#B45309}
+.ri-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#fff;flex-shrink:0}
+.ri-info{flex:1;min-width:0}
+.ri-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ri-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.ri-pts{font-size:14px;font-weight:800;color:var(--orange);flex-shrink:0}
+.ri-badge{font-size:14px;flex-shrink:0}
+.divider-sep{text-align:center;color:var(--text3);font-size:12px;padding:6px 0}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:50;height:58px;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 4px}
+.bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 12px;border-radius:8px;border:none;background:none;cursor:pointer;color:var(--text3);flex:1}
+.bnav-btn.active{color:var(--orange)}
+.bnav-btn svg{width:19px;height:19px}
+.bnav-label{font-size:9px;font-weight:700;letter-spacing:0.5px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-title">Classement</div>
+  <button class="theme-toggle" id="themeToggle"></button>
+</nav>
+
+<!-- PODIUM -->
+<div class="podium-section">
+  <div class="podium-label">Top Qwestify — Genève</div>
+  <div class="podium">
+    <!-- 2nd -->
+    <div class="podium-item p2">
+      <div class="p-avatar" style="background:linear-gradient(135deg,#3B82F6,#6366F1)">A</div>
+      <div class="p-name">Alex K.</div>
+      <div class="p-pts">980 pts</div>
+      <div class="podium-block pb2">2</div>
+    </div>
+    <!-- 1st -->
+    <div class="podium-item p1">
+      <div class="p-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">
+        <div class="p-crown">👑</div>
+        S
+      </div>
+      <div class="p-name">Sophie M.</div>
+      <div class="p-pts">1 240 pts</div>
+      <div class="podium-block pb1">1</div>
+    </div>
+    <!-- 3rd -->
+    <div class="podium-item p3">
+      <div class="p-avatar" style="background:linear-gradient(135deg,#22C55E,#16A34A)">M</div>
+      <div class="p-name">Marco B.</div>
+      <div class="p-pts">870 pts</div>
+      <div class="podium-block pb3">3</div>
+    </div>
+  </div>
+</div>
+
+<!-- MY POSITION -->
+<div class="my-pos">
+  <div class="my-rank">#47</div>
+  <div class="my-info">
+    <div class="my-name">Jordan (toi)</div>
+    <div class="my-pts-sub">Ligue Or · Niveau 22</div>
+  </div>
+  <div class="my-pts">250 pts</div>
+</div>
+
+<!-- FILTER TABS -->
+<div class="filter-tabs">
+  <button class="ftab active" onclick="showTab('global',this)">Global</button>
+  <button class="ftab" onclick="showTab('uber',this)">Uber</button>
+  <button class="ftab" onclick="showTab('migros',this)">Migros</button>
+  <button class="ftab" onclick="showTab('local',this)">Locaux</button>
+  <button class="ftab" onclick="showTab('weekly',this)">Cette semaine</button>
+</div>
+
+<!-- RANK LIST -->
+<div class="rank-section" id="rankList"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bnav-btn" onclick="window.location='index.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span class="bnav-label">Accueil</span></button>
+  <button class="bnav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><span class="bnav-label">Explorer</span></button>
+  <button class="bnav-btn active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span class="bnav-label">Classement</span></button>
+  <button class="bnav-btn" onclick="window.location='profil.html'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="bnav-label">Profil</span></button>
+</nav>
+
+<script>
+const html=document.documentElement;
+html.setAttribute('data-theme',localStorage.getItem('qst-theme')||'dark');
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+
+const players=[
+  {rank:1,name:'Sophie M.',pts:1240,avatar:'S',bg:'linear-gradient(135deg,#F59E0B,#EF4444)',badge:'🏆',league:'Platine'},
+  {rank:2,name:'Alex K.',pts:980,avatar:'A',bg:'linear-gradient(135deg,#3B82F6,#6366F1)',badge:'🥈',league:'Or'},
+  {rank:3,name:'Marco B.',pts:870,avatar:'M',bg:'linear-gradient(135deg,#22C55E,#16A34A)',badge:'🥉',league:'Or'},
+  {rank:4,name:'Léa B.',pts:760,avatar:'L',bg:'linear-gradient(135deg,#6366F1,#8B5CF6)',badge:'',league:'Or'},
+  {rank:5,name:'Nina R.',pts:680,avatar:'N',bg:'linear-gradient(135deg,#0891B2,#0E7490)',badge:'',league:'Argent'},
+  {rank:6,name:'Tom S.',pts:590,avatar:'T',bg:'linear-gradient(135deg,#EC4899,#F43F5E)',badge:'',league:'Argent'},
+  {rank:7,name:'Karim A.',pts:520,avatar:'K',bg:'linear-gradient(135deg,#D97706,#B45309)',badge:'',league:'Argent'},
+  {rank:8,name:'Claire D.',pts:480,avatar:'C',bg:'linear-gradient(135deg,#7C3AED,#6D28D9)',badge:'',league:'Argent'},
+  {rank:9,name:'Yannick F.',pts:420,avatar:'Y',bg:'linear-gradient(135deg,#059669,#047857)',badge:'',league:'Bronze'},
+  {rank:10,name:'Amira B.',pts:380,avatar:'A',bg:'linear-gradient(135deg,#DC2626,#B91C1C)',badge:'',league:'Bronze'},
+];
+
+function buildList(data,showMe=true){
+  const el=document.getElementById('rankList');
+  let html='';
+  data.slice(3).forEach(p=>{
+    const isMe=p.name==='Jordan (toi)';
+    const posClass=p.rank===4?'':'';
+    html+=`
+      <div class="rank-item${isMe?' me':''}">
+        <div class="ri-pos">${p.rank}</div>
+        <div class="ri-avatar" style="background:${p.bg}">${p.avatar}</div>
+        <div class="ri-info">
+          <div class="ri-name">${p.name}${isMe?' (toi)':''}</div>
+          <div class="ri-sub">Ligue ${p.league}</div>
+        </div>
+        <div class="ri-pts">${p.pts} pts</div>
+        <div class="ri-badge">${p.badge}</div>
+      </div>
+    `;
+  });
+  if(showMe){
+    html+=`<div class="divider-sep">· · ·</div>
+    <div class="rank-item me">
+      <div class="ri-pos" style="color:var(--orange)">47</div>
+      <div class="ri-avatar" style="background:linear-gradient(135deg,var(--orange),var(--violet))">J</div>
+      <div class="ri-info"><div class="ri-name">Jordan (toi)</div><div class="ri-sub">Ligue Or</div></div>
+      <div class="ri-pts">250 pts</div>
+      <div class="ri-badge"></div>
+    </div>`;
+  }
+  el.innerHTML=html;
+}
+
+function showTab(name,el){
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  buildList(players,true);
+}
+
+buildList(players,true);
+</script>
+</body>
+</html>

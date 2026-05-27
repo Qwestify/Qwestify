@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qwestify — Récompense débloquée</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ease:cubic-bezier(0.22,1,0.36,1);--orange:#FF6B2B;--orange2:#FF8C55;--violet:#7C3AED;--green:#22C55E;--yellow:#F59E0B}
+[data-theme="dark"]{--bg:#0E0E14;--bg2:#13131C;--bg3:#1C1C28;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#F0F0FA;--text2:#9898B8;--text3:#5A5A7A}
+[data-theme="light"]{--bg:#F5F5FA;--bg2:#FFFFFF;--bg3:#EBEBF5;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);--text:#0E0E14;--text2:#5A5A7A;--text3:#9898B8}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:100px}
+
+nav{height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:var(--bg);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10}
+.nav-back{display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--text2);font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif}
+.nav-back svg{width:18px;height:18px}
+.theme-toggle{width:48px;height:26px;background:var(--bg3);border:1px solid var(--border2);border-radius:13px;cursor:pointer;position:relative}
+.theme-toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:var(--text2);transition:transform 0.3s}
+[data-theme="light"] .theme-toggle::after{transform:translateX(22px);background:var(--orange)}
+
+/* CONFETTI HEADER */
+.result-header{padding:40px 16px 20px;text-align:center;position:relative;overflow:hidden}
+.confetti-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(34,197,94,0.12) 0%,transparent 70%);pointer-events:none}
+.trophy{font-size:64px;margin-bottom:12px;display:block;animation:bounce 1s var(--ease)}
+@keyframes bounce{0%{transform:scale(0.5) translateY(-20px);opacity:0}60%{transform:scale(1.1) translateY(0)}100%{transform:scale(1)}}
+.result-title{font-size:26px;font-weight:900;letter-spacing:-0.5px;margin-bottom:6px}
+.result-sub{font-size:14px;color:var(--text2);line-height:1.5}
+
+/* STATS ROW */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 16px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px 12px;text-align:center}
+.stat-icon{font-size:22px;margin-bottom:8px}
+.stat-num{font-size:22px;font-weight:900;margin-bottom:3px}
+.stat-label{font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.5px}
+
+/* COUPON */
+.coupon-section{margin:0 16px 20px;padding:24px;background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(34,197,94,0.03));border:2px dashed rgba(34,197,94,0.3);border-radius:20px;text-align:center;position:relative;overflow:hidden}
+.coupon-section::before{content:'';position:absolute;top:-30px;left:-30px;width:80px;height:80px;border-radius:50%;background:var(--bg);border:2px dashed rgba(34,197,94,0.3)}
+.coupon-section::after{content:'';position:absolute;top:-30px;right:-30px;width:80px;height:80px;border-radius:50%;background:var(--bg);border:2px dashed rgba(34,197,94,0.3)}
+.coupon-brand{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
+.coupon-value{font-size:52px;font-weight:900;color:var(--green);letter-spacing:-2px;line-height:1;margin-bottom:6px}
+.coupon-desc{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.5}
+.coupon-code-wrap{background:rgba(0,0,0,0.25);border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.coupon-code{font-size:20px;font-weight:800;letter-spacing:3px;font-family:monospace}
+.copy-btn{background:var(--orange);color:#fff;border:none;border-radius:7px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Inter',sans-serif}
+.coupon-expiry{font-size:11px;color:var(--text3);margin-top:10px}
+
+/* QR CODE PLACEHOLDER */
+.qr-section{margin:0 16px 20px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.qr-label{font-size:12px;font-weight:700;color:var(--text2);text-align:center}
+.qr-code{width:140px;height:140px;background:white;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:10px}
+.qr-code svg{width:100%;height:100%}
+.qr-hint{font-size:11px;color:var(--text3);text-align:center;line-height:1.5}
+
+/* RANKING */
+.ranking-section{margin:0 16px 20px}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:12px}
+.rank-item{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.rank-item.me{border-color:rgba(255,107,43,0.3);background:rgba(255,107,43,0.04)}
+.rank-pos{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0}
+.rp1{background:linear-gradient(135deg,#F59E0B,#F97316);color:#fff}
+.rp2{background:rgba(148,163,184,0.2);color:#94A3B8}
+.rp3{background:rgba(180,83,9,0.15);color:#B45309}
+.rpn{background:var(--bg3);color:var(--text2)}
+.rank-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;color:#fff;flex-shrink:0}
+.rank-name{flex:1;font-size:14px;font-weight:600}
+.rank-pts{font-size:13px;font-weight:700;color:var(--orange)}
+.rank-badge{font-size:11px;color:var(--text3)}
+
+/* NEXT SECTION */
+.next-section{margin:0 16px 20px}
+.next-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s;margin-bottom:8px}
+.next-card:hover{border-color:var(--border2);transform:translateX(3px)}
+.next-logo{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px}
+.nl-migros{background:linear-gradient(135deg,#EA580C,#C2410C)}
+.nl-shiroshi{background:linear-gradient(135deg,#4C1D95,#6D28D9)}
+.next-info{flex:1}
+.next-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.next-sub{font-size:12px;color:var(--text2)}
+.next-arrow{color:var(--text3);font-size:18px}
+
+/* BOTTOM */
+.bottom-cta{position:fixed;bottom:0;left:0;right:0;padding:12px 16px;background:var(--bg);border-top:1px solid var(--border);display:flex;gap:10px;z-index:10}
+.btn-main{flex:1;padding:14px;background:var(--orange);color:#fff;border:none;border-radius:12px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s}
+.btn-main:hover{background:var(--orange2);transform:translateY(-1px)}
+.btn-sec{padding:14px 20px;background:var(--bg2);color:var(--text2);border:1px solid var(--border2);border-radius:12px;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s}
+.btn-sec:hover{background:var(--bg3)}
+</style>
+</head>
+<body>
+
+<nav>
+  <button class="nav-back" onclick="window.location='index.html'">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+    Accueil
+  </button>
+  <button class="theme-toggle" id="themeToggle"></button>
+</nav>
+
+<!-- HEADER -->
+<div class="result-header">
+  <div class="confetti-bg"></div>
+  <span class="trophy">🎉</span>
+  <div class="result-title">Récompense débloquée !</div>
+  <div class="result-sub">Tu as complété toutes les quêtes Uber.<br>Ton bon est prêt à être utilisé.</div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-card">
+    <div class="stat-icon">🎁</div>
+    <div class="stat-num" style="color:var(--green)">20 CHF</div>
+    <div class="stat-label">Récompense</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">⚡</div>
+    <div class="stat-num" style="color:var(--orange)">+250</div>
+    <div class="stat-label">Points gagnés</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🏆</div>
+    <div class="stat-num" style="color:var(--yellow)">#47</div>
+    <div class="stat-label">Classement</div>
+  </div>
+</div>
+
+<!-- COUPON -->
+<div class="coupon-section">
+  <div class="coupon-brand">Uber Genève</div>
+  <div class="coupon-value">20 CHF</div>
+  <div class="coupon-desc">Valable sur ta prochaine course Uber à Genève<br>— 1 utilisation, valable 30 jours</div>
+  <div class="coupon-code-wrap">
+    <span class="coupon-code" id="couponCode">QST-7X4K-2M9P</span>
+    <button class="copy-btn" onclick="copyCode()">Copier</button>
+  </div>
+  <div class="coupon-expiry">Expire le 25 juin 2025</div>
+</div>
+
+<!-- QR CODE -->
+<div class="qr-section">
+  <div class="qr-label">Montre ce QR code au commerçant</div>
+  <div class="qr-code">
+    <!-- Simple SVG QR code pattern -->
+    <svg viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="21" height="21" fill="white"/>
+      <!-- Top-left finder pattern -->
+      <rect x="1" y="1" width="7" height="7" fill="black"/>
+      <rect x="2" y="2" width="5" height="5" fill="white"/>
+      <rect x="3" y="3" width="3" height="3" fill="black"/>
+      <!-- Top-right finder pattern -->
+      <rect x="13" y="1" width="7" height="7" fill="black"/>
+      <rect x="14" y="2" width="5" height="5" fill="white"/>
+      <rect x="15" y="3" width="3" height="3" fill="black"/>
+      <!-- Bottom-left finder pattern -->
+      <rect x="1" y="13" width="7" height="7" fill="black"/>
+      <rect x="2" y="14" width="5" height="5" fill="white"/>
+      <rect x="3" y="15" width="3" height="3" fill="black"/>
+      <!-- Data dots -->
+      <rect x="9" y="1" width="1" height="1" fill="black"/>
+      <rect x="11" y="1" width="1" height="1" fill="black"/>
+      <rect x="9" y="3" width="1" height="1" fill="black"/>
+      <rect x="10" y="4" width="1" height="1" fill="black"/>
+      <rect x="12" y="4" width="1" height="1" fill="black"/>
+      <rect x="9" y="6" width="2" height="1" fill="black"/>
+      <rect x="9" y="9" width="1" height="3" fill="black"/>
+      <rect x="11" y="9" width="3" height="1" fill="black"/>
+      <rect x="13" y="10" width="1" height="2" fill="black"/>
+      <rect x="11" y="11" width="2" height="1" fill="black"/>
+      <rect x="10" y="13" width="1" height="1" fill="black"/>
+      <rect x="12" y="13" width="2" height="1" fill="black"/>
+      <rect x="11" y="15" width="1" height="2" fill="black"/>
+      <rect x="13" y="14" width="2" height="1" fill="black"/>
+      <rect x="15" y="15" width="2" height="2" fill="black"/>
+      <rect x="13" y="17" width="1" height="2" fill="black"/>
+      <rect x="16" y="18" width="2" height="1" fill="black"/>
+      <rect x="9" y="17" width="1" height="3" fill="black"/>
+    </svg>
+  </div>
+  <div class="qr-hint">Le commerçant scanne ce code pour valider ton bon directement.</div>
+</div>
+
+<!-- CLASSEMENT -->
+<div class="ranking-section">
+  <div class="section-label">Classement Uber Genève</div>
+
+  <div class="rank-item">
+    <div class="rank-pos rp1">1</div>
+    <div class="rank-avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)">S</div>
+    <div class="rank-name">Sophie M.</div>
+    <div><div class="rank-pts">1 240 pts</div></div>
+  </div>
+  <div class="rank-item">
+    <div class="rank-pos rp2">2</div>
+    <div class="rank-avatar" style="background:linear-gradient(135deg,#3B82F6,#6366F1)">A</div>
+    <div class="rank-name">Alex K.</div>
+    <div><div class="rank-pts">980 pts</div></div>
+  </div>
+  <div class="rank-item">
+    <div class="rank-pos rp3">3</div>
+    <div class="rank-avatar" style="background:linear-gradient(135deg,#22C55E,#16A34A)">M</div>
+    <div class="rank-name">Marco B.</div>
+    <div><div class="rank-pts">870 pts</div></div>
+  </div>
+  <div style="text-align:center;padding:6px;color:var(--text3);font-size:12px">· · ·</div>
+  <div class="rank-item me">
+    <div class="rank-pos rpn">47</div>
+    <div class="rank-avatar" style="background:linear-gradient(135deg,var(--orange),var(--violet))">J</div>
+    <div class="rank-name">Jordan (toi)</div>
+    <div><div class="rank-pts">250 pts</div><div class="rank-badge">Nouveau</div></div>
+  </div>
+</div>
+
+<!-- PROCHAINES QUÊTES -->
+<div class="next-section">
+  <div class="section-label">Continue sur ta lancée</div>
+  <div class="next-card" onclick="window.location='quest.html'">
+    <div class="next-logo nl-migros">🛒</div>
+    <div class="next-info">
+      <div class="next-name">Migros Genève</div>
+      <div class="next-sub">4 quêtes — Bon 5 CHF à gagner</div>
+    </div>
+    <div class="next-arrow">›</div>
+  </div>
+  <div class="next-card" onclick="window.location='quest.html'">
+    <div class="next-logo nl-shiroshi">☕</div>
+    <div class="next-info">
+      <div class="next-name">Café Shiroshi</div>
+      <div class="next-sub">3 quêtes — 1 café offert</div>
+    </div>
+    <div class="next-arrow">›</div>
+  </div>
+</div>
+
+<div class="bottom-cta">
+  <button class="btn-sec" onclick="window.location='index.html'">Accueil</button>
+  <button class="btn-main" onclick="copyCode()">Copier mon code 🎁</button>
+</div>
+
+<script>
+const html=document.documentElement;
+const saved=localStorage.getItem('qst-theme')||'dark';
+html.setAttribute('data-theme',saved);
+document.getElementById('themeToggle').addEventListener('click',()=>{
+  const n=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',n);localStorage.setItem('qst-theme',n);
+});
+
+function copyCode(){
+  const code=document.getElementById('couponCode').textContent;
+  navigator.clipboard?.writeText(code).then(()=>{
+    const btn=document.querySelector('.copy-btn');
+    if(btn){btn.textContent='Copié !';btn.style.background='var(--green)';setTimeout(()=>{btn.textContent='Copier';btn.style.background='';},2000);}
+  });
+}
+</script>
+</body>
+</html>
