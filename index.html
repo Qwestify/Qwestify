@@ -825,6 +825,12 @@ footer {
     <button class="btn-primary" onclick="goSignup()">Commencer gratuitement</button>
     <button class="btn-secondary" onclick="scrollTo('#quests')">Voir les quêtes</button>
   </div>
+  <!-- CTA Commerçant — visible uniquement non connecté -->
+  <div id="heroBizCta" style="margin-top:14px">
+    <a href="partenaires.html" style="display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--text3);text-decoration:none;border:1px solid var(--border2);border-radius:20px;padding:6px 14px;transition:all 0.2s;background:var(--bg2)" onmouseover="this.style.borderColor='var(--orange)';this.style.color='var(--orange)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text3)'">
+      🏪 Vous êtes un commerce genevois ? Boostez votre visibilité ici
+    </a>
+  </div>
 
   <div class="hero-stats">
     <div class="hstat">
@@ -1150,9 +1156,14 @@ footer {
   <div class="footer-links">
     <a href="legal.html">À propos</a>
     <a href="commercant.html">Partenaires</a>
-    <a href="legal.html#doc-privacy">Confidentialité</a>
+    <a href="legal.html">Confidentialité</a>
     <a href="legal.html">CGU</a>
     <a href="mailto:contact@qwestify.ch">Contact</a>
+  </div>
+  <div style="margin:12px 0">
+    <a href="partenaires.html" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:700;color:var(--orange);text-decoration:none;border:1px solid rgba(255,107,43,0.3);border-radius:20px;padding:8px 18px;background:rgba(255,107,43,0.06);transition:all 0.2s" onmouseover="this.style.background='rgba(255,107,43,0.12)'" onmouseout="this.style.background='rgba(255,107,43,0.06)'">
+      🏪 Espace Commerçants / Partenaires
+    </a>
   </div>
   <div class="footer-copy">© 2025 Qwestify — Genève, Suisse</div>
 </footer>
@@ -1198,7 +1209,17 @@ window.addEventListener('DOMContentLoaded', () => {
       app.style.display = 'block';
     }
   }
+  // Masquer les CTAs commerçant si connecté
+  updateBizCtas();
 });
+
+function updateBizCtas() {
+  const isLoggedIn = !!localStorage.getItem('qst-loggedin');
+  const heroCta = document.getElementById('heroBizCta');
+  const menuBtn = document.getElementById('menuBizBtn');
+  if (heroCta) heroCta.style.display = isLoggedIn ? 'none' : 'block';
+  if (menuBtn) menuBtn.style.display = isLoggedIn ? 'none' : 'flex';
+}
 
 /* ---- FILTER & SEARCH ---- */
 let activeFilter = 'all';
@@ -1336,12 +1357,14 @@ function enterApp(name) {
   document.getElementById('landing').style.display = 'none';
   document.getElementById('app').style.display = 'block';
   if(name && document.getElementById('appUsername')) document.getElementById('appUsername').textContent = name;
+  updateBizCtas();
   window.scrollTo(0,0);
 }
 function exitApp() {
   localStorage.removeItem('qst-loggedin');
   document.getElementById('app').style.display = 'none';
   document.getElementById('landing').style.display = 'block';
+  updateBizCtas();
   window.scrollTo(0,0);
 }
 function openMenu() { document.getElementById('sideMenu').classList.add('open'); document.getElementById('sideOverlay').classList.add('open'); }
@@ -1594,7 +1617,13 @@ window.addEventListener('DOMContentLoaded', () => {
       <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>Dashboard commerçant</button>
       <button class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M20 12h-2M6 12H4M18.66 18.66l-1.41-1.41M6.75 6.75L5.34 5.34M12 20v-2M12 6V4"/></svg>Paramètres</button>
     </div>
-    <div class="side-footer"><button class="btn-logout" onclick="exitApp()">Se déconnecter</button></div>
+    <div class="side-footer">
+      <!-- Bouton commerçant dans le menu burger — masqué si connecté -->
+      <a href="partenaires.html" id="menuBizBtn" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.2);border-radius:10px;color:var(--orange);font-family:'Inter',sans-serif;font-size:14px;font-weight:700;text-decoration:none;margin-bottom:10px;transition:all 0.2s">
+        🏪 Vous êtes un commerce ?
+      </a>
+      <button class="btn-logout" onclick="exitApp()">Se déconnecter</button>
+    </div>
   </div>
 
   <div class="side-overlay" id="rightOverlay" onclick="closePanel()"></div>
